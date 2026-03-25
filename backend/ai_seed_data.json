@@ -1,0 +1,357 @@
+[
+    {
+        "name": "Emily Chen",
+        "email": "emily@example.com",
+        "password": "password123",
+        "bio": "Tech enthusiast and software engineer. I love writing about React, Node.js, and the future of web development.",
+        "location": "San Francisco, CA",
+        "website": "emilychen.dev",
+        "profileImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2787&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "Mastering React Hooks in 2024",
+                "content": "<p>React Hooks completely revolutionized how we build components. Gone are the days of confusing class constructors and `this` binding issues.</p><p>Today, I want to talk about some advanced hook patterns that aren't talked about enough, specifically `useImperativeHandle` and `useLayoutEffect`.</p><h3>Why useImperativeHandle?</h3><p>Sometimes, but rarely, you need a parent component to call a method on a child component. This was easy with classes and refs, but with functional components, `useImperativeHandle` is your best friend when combined with `forwardRef`.</p><p>Remember, this is an escape hatch! Use it sparingly.</p>",
+                "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "React",
+                    "JavaScript",
+                    "Web Development"
+                ],
+                "comments": [
+                    {
+                        "text": "Great breakdown of advanced hooks!",
+                        "author": "Marcus Rossi"
+                    },
+                    {
+                        "text": "I've been struggling with useLayoutEffect, this helped immensely.",
+                        "author": "Alex Mercer"
+                    }
+                ]
+            },
+            {
+                "title": "The Rise of Serverless Architecture: Pros and Cons",
+                "content": "<p>Serverless computing is arguably the most significant shift in application architecture since the advent of the cloud itself.</p><p>Services like AWS Lambda, Azure Functions, and Vercel are making it incredibly easy to deploy scalable code without thinking about servers.</p><h3>The Good</h3><ul><li>Auto-scaling out of the box</li><li>Pay for what you use</li><li>Reduced operational overhead</li></ul><h3>The Bad</h3><ul><li>Cold starts can introduce latency</li><li>Vendor lock-in is a real concern</li><li>Debugging distributed, event-driven architectures can be a nightmare</li></ul><p>Ultimately, serverless isn't a silver bullet, but it's an incredible tool when used for the right workload.</p>",
+                "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop",
+                "tags": [
+                    "Cloud",
+                    "Serverless",
+                    "Architecture"
+                ],
+                "comments": [
+                    {
+                        "text": "Cold starts are definitely the biggest pain point for me right now.",
+                        "author": "Sophie Harper"
+                    }
+                ]
+            },
+            {
+                "title": "My Favorite VS Code Extensions for High Productivity",
+                "content": "<p>Your code editor is your home. Making it comfortable and efficient is crucial. Over the years, I've curated a list of extensions that I absolutely cannot live without.</p><ol><li><b>Prettier:</b> An absolute must for consistent code formatting.</li><li><b>GitLens:</b> Supercharge your Git capabilities directly inside the editor.</li><li><b>ESLint:</b> Catch silly mistakes before you even run your code.</li><li><b>Error Lens:</b> Inline errors right where you type them.</li></ol><p>What are your favorite extensions? Sound off in the comments!</p>",
+                "image": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Productivity",
+                    "VS Code",
+                    "Tools"
+                ],
+                "comments": [
+                    {
+                        "text": "Error Lens changed my life! Good list.",
+                        "author": "Leo Vance"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Marcus Rossi",
+        "email": "marcus@example.com",
+        "password": "password123",
+        "bio": "Wandering the globe. Trading the 9-to-5 for 24/7 adventure. Seeking the best street food on Earth.",
+        "location": "Nomadic",
+        "website": "marcustravels.com",
+        "profileImage": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1287&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "Hidden Gems of Kyoto: Off the Beaten Path",
+                "content": "<p>Everyone knows the Fushimi Inari Shrine and the Bamboo Forest in Arashiyama. They are crowded, commercialized, and while beautiful, not exactly 'peaceful'.</p><p>Last week, I rented a bicycle and headed north into the mountains. I discovered tiny, moss-covered shrines where the only sound was running water and wind through the trees.</p><p>If you genuinely want to experience the soul of Kyoto, you have to get away from the tour buses.</p><p>My favorite discovery was the Otagi Nenbutsu-ji temple, featuring 1200 stone statues representing the disciples of Buddha, all carved by amateurs. Each one is entirely unique.</p>",
+                "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Travel",
+                    "Japan",
+                    "Photography"
+                ],
+                "comments": [
+                    {
+                        "text": "Adding Otagi Nenbutsu-ji to my itinerary right now!",
+                        "author": "Sarah Jenkins"
+                    }
+                ]
+            },
+            {
+                "title": "How I Afford to Travel Full Time",
+                "content": "<p>The number one question I get asked is, 'How do you pay for all this?'</p><p>The reality is much less glamorous than my Instagram feed implies. Traveling full-time requires extreme budgeting, a remote income source, and compromises.</p><ul><li><b>Remote Work:</b> I work as a freelance graphic designer. As long as I have Wi-Fi, I have an income.</li><li><b>Geo-Arbitrage:</b> Earning dollars or euros and spending them in countries with a lower cost of living is the ultimate hack.</li><li><b>Hostels over Hotels:</b> You meet incredible people and save a fortune.</li></ul><p>It's not a vacation; it's a lifestyle choice. And it's frankly not for everyone.</p>",
+                "image": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2674&auto=format&fit=crop",
+                "tags": [
+                    "Digital Nomad",
+                    "Lifestyle",
+                    "Budgeting"
+                ],
+                "comments": []
+            },
+            {
+                "title": "The Best Street Food in Bangkok",
+                "content": "<p>Bangkok is arguably the street food capital of the world. The sheer variety and quality of food available on the pavement are staggering.</p><p>Here are three things you absolutely must try:</p><ol><li><b>Pad Kra Pao:</b> Spicy holy basil stir-fry with minced pork, served over rice with a fried egg. It’s fiery and deeply savory.</li><li><b>Som Tum:</b> Green papaya salad. It balances sweet, sour, salty, and spicy perfectly.</li><li><b>Mango Sticky Rice:</b> The ultimate dessert. Sweet coconut milk, fresh mango, and sticky glutinous rice. Heavenly.</li></ol><p>Don't be afraid of the street carts! Just look for the ones with a long line of locals.</p>",
+                "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2574&auto=format&fit=crop",
+                "tags": [
+                    "Food",
+                    "Travel",
+                    "Thailand"
+                ],
+                "comments": [
+                    {
+                        "text": "Pad Kra Pao is elite. Now I'm hungry.",
+                        "author": "Emily Chen"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Sarah Jenkins",
+        "email": "sarah@example.com",
+        "password": "password123",
+        "bio": "Fitness coach and nutrition enthusiast. Believes in sustainable healthy habits, not fad diets.",
+        "location": "Austin, TX",
+        "website": "sarahfit.co",
+        "profileImage": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2670&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "Why You're Not Losing Weight in a Calorie Deficit",
+                "content": "<p>The math seems simple: eat less than you burn, and you'll lose weight. But human metabolism is wonderfully complex.</p><p>If you've hit a plateau, consider these hidden factors:</p><ul><li><b>Hidden calories:</b> Cooking oils, dressings, and 'tastes' while cooking add up incredibly fast. Are you actually tracking everything?</li><li><b>Metabolic adaptation:</b> When you diet for a long time, your body becomes efficient and burns fewer calories at rest. You might need a diet break.</li><li><b>Stress and Sleep:</b> High cortisol and poor sleep drastically affect how your body handles insulin and stores fat.</li></ul><p>Focus on the long game. Consistency beats perfection.</p>",
+                "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2653&auto=format&fit=crop",
+                "tags": [
+                    "Health",
+                    "Fitness",
+                    "Nutrition"
+                ],
+                "comments": [
+                    {
+                        "text": "I really needed to hear this today. The plateau has been frustrating.",
+                        "author": "Alex Mercer"
+                    }
+                ]
+            },
+            {
+                "title": "My 15-Minute Morning Mobility Routine",
+                "content": "<p>Before I lift weights, run, or even sit at my desk, I spend 15 minutes prioritizing my joint health and mobility.</p><p>It wakes up my central nervous system and prevents injuries. My flow looks like this:</p><ol><li>Cat-Cow stretches (1 minute)</li><li>World's Greatest Stretch (3 minutes per side)</li><li>90/90 Hip Rotations (3 minutes)</li><li>Deep Squat hold with rotation (2 minutes)</li></ol><p>Try adding this to your morning routine for two weeks and tell me you don't feel a massive difference!</p>",
+                "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Fitness",
+                    "Mobility",
+                    "Routine"
+                ],
+                "comments": []
+            },
+            {
+                "title": "The Truth About Protein Powders: Do You Really Need Them?",
+                "content": "<p>The supplement industry wants you to believe that a post-workout shake is mandatory for muscle growth. It's simply not true.</p><p>Protein powder is exactly that: a supplement. It supplements a diet. It's highly processed food, usually derived from milk (whey/casein) or plants (pea/soy).</p><p><b>When to use it:</b></p><ul><li>Convenience when traveling or crunched for time.</li><li>Struggling to hit daily protein targets through whole foods alone.</li></ul><p>Always prioritize whole foods (chicken, fish, eggs, tofu, lentils) first. They contain micronutrients that a powder simply cannot provide.</p>",
+                "image": "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Nutrition",
+                    "Diet",
+                    "Supplements"
+                ],
+                "comments": [
+                    {
+                        "text": "Finally some sense! I was spending way too much on supplements.",
+                        "author": "Marcus Rossi"
+                    }
+                ]
+            },
+            {
+                "title": "How to Build a Sustainable Workout Habit",
+                "content": "<p>Motivation is fleeting. Discipline is reliable, but hard to build. The secret is making the habit so small you can't fail.</p><p>Don't commit to 'working out for an hour every day'. Commit to putting on your gym shoes. Commit to walking into the gym. Usually, once you're there, you'll stay.</p><p>Habit stacking is also incredibly effective. Pair your new habit (doing 10 squats) with an existing habit (brushing your teeth).</p><p>Give yourself permission to do a 'bad' workout. A 10-minute walk is infinitely better than 0 minutes of movement.</p>",
+                "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Mindset",
+                    "Habits",
+                    "Fitness"
+                ],
+                "comments": []
+            }
+        ]
+    },
+    {
+        "name": "Alex Mercer",
+        "email": "alex@example.com",
+        "password": "password123",
+        "bio": "Indie game developer, pixel art enthusiast, and retro gaming historian. Building 'Starfall 198X'.",
+        "location": "Seattle, WA",
+        "website": "alexmercergames.itch.io",
+        "profileImage": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1287&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "Devlog #4: Implementing Pathfinding with A*",
+                "content": "<p>Getting enemies to navigate around obstacles without looking stupid is one of the hardest parts of 2D game dev.</p><p>This week, I ripped out my crude raycasting approach and fully implemented the A* (A-star) algorithm.</p><p>It calculates 'costs' for moving to different grid tiles, finding the shortest path that avoids solid objects. The difference in enemy AI is night and day. They actually corner you now!</p><p>Next week: Implementing a state machine for enemy behaviors (wander, chase, attack).</p>",
+                "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "GameDev",
+                    "Programming",
+                    "IndieGames"
+                ],
+                "comments": [
+                    {
+                        "text": "A* is a rite of passage for game devs. Nice work!",
+                        "author": "Emily Chen"
+                    }
+                ]
+            },
+            {
+                "title": "Why Hollow Knight's Level Design is a Masterclass",
+                "content": "<p>I recently replayed Hollow Knight, and I'm staggering by how brilliant Team Cherry's map design is.</p><p>It's textbook Metroidvania, but executed flawlessly. The 'lock and key' design isn't just literal keys; it's movement abilities. A dash lets you cross a gap you've been staring at for 3 hours.</p><p>The subtle use of lighting to draw the player's eye towards secrets, and the interconnectivity of the world feeling organic rather than forced, is something I reference daily while building my own worlds.</p>",
+                "image": "https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=2638&auto=format&fit=crop",
+                "tags": [
+                    "Gaming",
+                    "Design",
+                    "Analysis"
+                ],
+                "comments": []
+            },
+            {
+                "title": "Choosing between Unity and Godot in 2024",
+                "content": "<p>With recent pricing controversies surrounding established engines, many indie devs (including me) found themselves evaluating their tools.</p><p>I spent a month prototyping in Godot 4. Here's my honest take:</p><p><b>Godot's Strengths:</b> Incredibly lightweight, the node system is brilliant for UI and composition, and GDScript is a joy to write for rapid iteration.</p><p><b>Unity's Strengths:</b> The asset store is unparalleled, C# is an industry standard, and handling 3D is still far more robust.</p><p>For a 2D indie game, Godot is becoming a terrifyingly strong competitor.</p>",
+                "image": "https://images.unsplash.com/photo-1633535970086-4fbf2a096cce?q=80&w=2672&auto=format&fit=crop",
+                "tags": [
+                    "GameDev",
+                    "Godot",
+                    "Unity"
+                ],
+                "comments": [
+                    {
+                        "text": "I made the switch to Godot last month and I'm never looking back.",
+                        "author": "Leo Vance"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Sophie Harper",
+        "email": "sophie@example.com",
+        "password": "password123",
+        "bio": "Minimalist, slow living advocate, and plant mom. Exploring how to live a more intentional life.",
+        "location": "Portland, OR",
+        "website": "slowwithsophie.com",
+        "profileImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1364&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "The Art of Slow Mornings",
+                "content": "<p>For years, my mornings were a blurry rush of alarms, coffee, and anxiety about my inbox.</p><p>I decided to reclaim the first hour of my day. I wake up earlier not to do more, but to do less.</p><p>My phone stays out of the bedroom. I brew tea slowly. I sit by the window and watch the light change. Sometimes I journal, sometimes I just stare.</p><p>Starting the day from a place of quiet neutrality changes how you react to every stressful event that follows.</p>",
+                "image": "https://images.unsplash.com/photo-1506804886640-1add914eb1d9?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Mindfulness",
+                    "Slow Living",
+                    "Lifestyle"
+                ],
+                "comments": [
+                    {
+                        "text": "I love this so much. I need to stop checking emails in bed.",
+                        "author": "Sarah Jenkins"
+                    }
+                ]
+            },
+            {
+                "title": "A Beginner's Guide to Houseplants That Won't Die",
+                "content": "<p>We've all been there: buying a gorgeous, finicky plant only to watch it slowly die over three weeks.</p><p>If you want to bring green into your home without the stress, start with these indistructable warriors:</p><ul><li><b>Snake Plant (Sansevieria):</b> Thrives on neglect. Low light? Fine. Forgot to water it for a month? It doesn't care.</li><li><b>ZZ Plant:</b> Similar to the snake plant, it stores water in its rhizomes. Perfect for dark corners in your apartment.</li><li><b>Pothos:</b> An incredibly fast-growing trailing plant. It will tell you when it's thirsty (the leaves droop), and perks up hours after a good watering.</li></ul>",
+                "image": "https://images.unsplash.com/photo-1416879598555-520f9f214227?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Plants",
+                    "Home",
+                    "Beginner Guide"
+                ],
+                "comments": []
+            },
+            {
+                "title": "Decluttering: It's Not About Getting Rid of Things",
+                "content": "<p>When we talk about minimalism or decluttering, the focus is entirely on the subtraction: throwing things away.</p><p>But the real magic of decluttering is what happens when you're finished. It's about revealing what actually matters to you.</p><p>When you remove the noise of excess possessions, you stop spending weekends organizing things you don't even like. You gain time, mental clarity, and breathing room.</p><p>Keep the things that spark joy (thanks Marie Kondo), but also keep the things that represent the life you actually live, not the one you fantasy-project.</p>",
+                "image": "https://images.unsplash.com/photo-1499933374294-4584d31509bf?q=80&w=2788&auto=format&fit=crop",
+                "tags": [
+                    "Minimalism",
+                    "Decluttering",
+                    "Mindset"
+                ],
+                "comments": []
+            },
+            {
+                "title": "Digital Minimalism: Taking Back Your Attention",
+                "content": "<p>Our devices are engineered like slot machines to hijack our attention. We are not weak; we are simply losing a battle against thousands of engineers.</p><p>Last month, I deleted all social media apps from my phone. I didn't delete the accounts, just the apps. If I want to check Instagram, I have to boot up my laptop.</p><p>The friction alone reduced my screen time by 3 hours a day. Three hours! I suddenly have time to read books again.</p><p>Reclaiming your attention is the ultimate act of rebellion in the modern world.</p>",
+                "image": "https://images.unsplash.com/photo-1526494921677-ae196620caee?q=80&w=2722&auto=format&fit=crop",
+                "tags": [
+                    "Digital Minimalism",
+                    "Focus",
+                    "Tech"
+                ],
+                "comments": [
+                    {
+                        "text": "Hard agree. The friction method is the only thing that works for me.",
+                        "author": "Emily Chen"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Leo Vance",
+        "email": "leo@example.com",
+        "password": "password123",
+        "bio": "Financial analyst trying to make personal finance accessible. Index funds, compound interest, and early retirement.",
+        "location": "Chicago, IL",
+        "website": "leofinance.substack.com",
+        "profileImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1287&auto=format&fit=crop",
+        "posts": [
+            {
+                "title": "The Magic of Compound Interest Visualized",
+                "content": "<p>Albert Einstein reportedly called compound interest the eighth wonder of the world. He wasn't exaggerating.</p><p>If you invest $500 a month starting at age 25, assuming an optimistic 8% annual return, you'll have over <b>$1.7 million</b> by age 65.</p><p>If you wait until age 35 to start investing that same $500 a month? You'll only have about <b>$745,000</b>.</p><p>Those 10 years cost you a million dollars. Time in the market always beats timing the market. Start now. Open a Roth IRA.</p>",
+                "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Investing",
+                    "Finance",
+                    "Retirement"
+                ],
+                "comments": [
+                    {
+                        "text": "This math always blows my mind.",
+                        "author": "Marcus Rossi"
+                    }
+                ]
+            },
+            {
+                "title": "Why You Should Ignore Stock Picking Apps",
+                "content": "<p>Apps that gamify day trading with confetti and bright colors are dangerous. They sell the illusion that picking individual stocks is a reliable way to build wealth.</p><p>Statistically, over 90% of actively managed funds fail to beat the S&P 500 index over a 10-year period. These are professionals with supercomputers who lose to a boring index fund.</p><p>What are the odds you, sitting on your couch on Robinhood, will beat the market? Don't gamble your retirement. Buy broad market index funds (like VTSAX or VTI) and go live your life.</p>",
+                "image": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=2670&auto=format&fit=crop",
+                "tags": [
+                    "Investing",
+                    "Index Funds",
+                    "Personal Finance"
+                ],
+                "comments": []
+            },
+            {
+                "title": "How to Build an Emergency Fund (Without Hurting)",
+                "content": "<p>An emergency fund is insurance against financial ruin. Before you invest a single dollar, you need 3-6 months of essential living expenses parked in a High Yield Savings Account (HYSA).</p><p>Building it feels daunting. The trick is automation.</p><ol><li>Calculate your bare-bones monthly expenses (rent, groceries, utilities). Multiply by 3.</li><li>Set up an automatic transfer from your checking to your HYSA the day after your paycheck hits.</li><li>Forget about it. Treat it as a tax you pay to your future self for peace of mind.</li></ol><p>When your car breaks down, it's an inconvenience, not a catastrophe.</p>",
+                "image": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2672&auto=format&fit=crop",
+                "tags": [
+                    "Money Management",
+                    "Savings",
+                    "Finance"
+                ],
+                "comments": [
+                    {
+                        "text": "Automation is the key. Paying yourself first changes everything.",
+                        "author": "Sophie Harper"
+                    }
+                ]
+            }
+        ]
+    }
+]

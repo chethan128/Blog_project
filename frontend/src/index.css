@@ -1,0 +1,90 @@
+:root {
+  /* Core Typography */
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* base colors for SaaS Dark Theme */
+  --bg-gradient: #0F0F1A;
+  --text-color: #FFFFFF;
+  --card-bg: #1C1C34;
+  --input-bg: #24244A;
+  --input-text: #EAEAFF;
+  --heading-color: #FFFFFF;
+  --subtext-color: #A0A0C0;
+  --search-placeholder: rgba(255, 255, 255, 0.5);
+
+  /* Accent Palette */
+  --primary-gradient: linear-gradient(135deg, #6C63FF 0%, #7D75FF 100%);
+  --primary-color: #6C63FF;
+  --primary-hover: #7D75FF;
+  --secondary-color: #FF7A18;
+  --success-color: #22C55E;
+
+  --overlay-bg: rgba(15, 15, 26, 0.9);
+  --input-border: #2E2E55;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  /* Component specific dark mode vars */
+  --navbar-bg: #1B1B2F;
+  --navbar-border: #2A2A40;
+  --navbar-hover: #6C63FF;
+  --action-bar-bg: #16162B;
+  --form-card-bg: #181830;
+  --form-input-border: #323266;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.light {
+  /* Premium Light Mode Palette (Modern SaaS) */
+  --bg-gradient: linear-gradient(135deg, #F0F4FF 0%, #F9F5FF 50%, #F0FAFF 100%);
+  --text-color: #1a1a2e;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --input-bg: rgba(255, 255, 255, 0.95);
+  --input-text: #1a1a2e;
+  --heading-color: #0f0f1a;
+  --subtext-color: #555b6e;
+  --overlay-bg: rgba(255, 255, 255, 0.75);
+  --input-border: #D1D5E8;
+  --glass-shadow: 0px 8px 32px rgba(108, 99, 255, 0.08);
+
+  /* Component specific light mode vars */
+  --navbar-bg: rgba(255, 255, 255, 0.65);
+  --navbar-border: rgba(255, 255, 255, 0.3);
+  --navbar-hover: #5A52E0;
+  --action-bar-bg: rgba(255, 255, 255, 0.7);
+  --action-bar-border: rgba(209, 213, 232, 0.5);
+  --form-card-bg: rgba(255, 255, 255, 0.9);
+  --form-input-border: #D1D5E8;
+  --form-placeholder: #8b93a6;
+  --primary-color: #5A52E0; /* Deepened primary for better contrast */
+  --primary-hover: #4B41E6;
+  --search-placeholder: #8b93a6;
+}
+
+/* Base utility for glass cards */
+.glass-effect {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--input-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Global Autocomplete/Autofill Override */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 50px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  background-clip: content-box !important;
+}

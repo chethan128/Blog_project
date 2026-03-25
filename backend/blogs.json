@@ -1,0 +1,242 @@
+[
+  {
+    "title": "The Dawn of Artificial General Intelligence",
+    "content": "Artificial General Intelligence (AGI) is no longer just a concept from science fiction. Recent breakthroughs in large language models and neural network architectures suggest we might be closer than previously thought. Unlike narrow AI, which is designed to perform specific tasks, AGI aims to understand, learn, and apply knowledge across a wide range of cognitive domains, matching or exceeding human capabilities. Researchers argue that achieving AGI requires not just scaling up current models, but fundamental shifts in how machines comprehend reasoning, abstraction, and common sense. As investment pours into this field, the ethical and societal implications are becoming paramount. We must balance the extraordinary potential benefits of AGI in medicine and science with the critical need for alignment and safety protocols.",
+    "author": "demo@user.com",
+    "tags": ["AI", "Technology"],
+    "image": "https://images.unsplash.com/photo-1620712948343-0008eccfc75c?auto=format&fit=crop&q=80&w=800",
+    "likes": 142
+  },
+  {
+    "title": "React vs Vue: Which Should You Choose in 2026?",
+    "content": "The battle between React and Vue continues, but the landscape has evolved significantly. React remains the undisputed king of enterprise applications, backed by its massive ecosystem and the introduction of advanced concurrent rendering features. However, Vue's composition API and out-of-the-box performance optimizations have made it an incredible, developer-friendly choice for both startups and established projects. If your team is already deeply ingrained in the JavaScript ecosystem and relies heavily on complex state management across vast components, React might still be your best bet. On the other hand, for rapid prototyping, highly reactive interfaces, and a gentler learning curve without sacrificing power, Vue is increasingly hard to ignore. Ultimately, the choice depends heavily on your team's background, not just technical superiority.",
+    "author": "demo@user.com",
+    "tags": ["Programming", "Technology"],
+    "image": "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&q=80&w=800",
+    "likes": 89
+  },
+  {
+    "title": "Understanding Quantum Computing's Impact on Data Science",
+    "content": "Quantum computing is slowly transitioning from theoretical physics laboratories to practical data science applications. Traditional computers process information in binary states (0s and 1s), whereas quantum computers use qubits, which can exist in multiple states simultaneously due to superposition and entanglement. This allows quantum systems to evaluate countless possibilities concurrently. For data science, this is revolutionary. Complex optimization problems, massive cryptography protocols, and intricate machine learning models that would take supercomputers years to resolve could theoretically be solved in minutes by quantum algorithms. As companies like IBM and Google continue to scale qubit stability, data scientists must prepare for a paradigm shift in how we approach algorithm efficiency and data processing architectural limits.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Technology", "AI"],
+    "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
+    "likes": 215
+  },
+  {
+    "title": "Building Resilient Microservices with Node.js",
+    "content": "Microservices have become the standard architecture for scalable web applications, and Node.js remains a premier choice for building them. Its non-blocking, event-driven nature allows it to handle thousands of concurrent connections lightweightly. However, building resilient microservices requires more than just picking a fast runtime. You need robust strategies for inter-service communication, distributed tracing, and fault tolerance. Implementing API gateways, utilizing message brokers like RabbitMQ or Kafka for asynchronous tasks, and employing circuit breakers to prevent cascading failures are critical steps. In this guide, we dive deep into architectural patterns that ensure your Node.js microservices can withstand heavy loads, network partition errors, and database bottlenecks without compromising the user experience.",
+    "author": "backend_guru@pixie.com",
+    "tags": ["Programming", "Architecture"],
+    "image": "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&q=80&w=800",
+    "likes": 340
+  },
+  {
+    "title": "The Rise of Edge AI: Processing Where It Matters",
+    "content": "Edge AI refers to the deployment of artificial intelligence algorithms directly on local devices—smartphones, IoT sensors, and local servers—rather than relying solely on cloud-based computing. This shift is driven by the need for real-time processing, enhanced data privacy, and reduced bandwidth costs. By processing data locally, Edge AI minimizes latency, which is crucial for autonomous vehicles and industrial robotics. Furthermore, since sensitive data doesn't leave the device, privacy is inherently improved. With the advent of specialized, low-power AI chips, even small devices can now run complex machine learning models. As 5G networks expand, the synergy between edge computing and AI will undoubtedly power the next wave of smart city and industrial automation innovations.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Technology"],
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+    "likes": 122
+  },
+  {
+    "title": "Mastering the Python Data Stack: Pandas, NumPy, and Beyond",
+    "content": "Python is the undisputed lingua franca of data science, and mastering its core data stack is essential for any aspiring analyst. At the heart of this ecosystem are NumPy, providing powerful N-dimensional array objects and mathematical operations, and Pandas, which introduces high-performance data structures like DataFrames for data manipulation and analysis. However, the ecosystem extends far beyond these two. Libraries like Matplotlib and Seaborn are vital for data visualization, allowing you to extract and communicate insights effectively. Scikit-learn offers accessible tools for predictive data analysis and machine learning. To truly excel, you must understand how these tools integrate, how to write vectorized operations to process massive datasets efficiently, and when to transition to distributed frameworks like Dask or PySpark.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Programming"],
+    "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800",
+    "likes": 275
+  },
+  {
+    "title": "GraphQL vs REST: A Pragmatic Approach",
+    "content": "The debate between GraphQL and REST APIs has matured from hype to practical architectural choices. REST, with its standardized HTTP methods and stateless constraints, remains excellent for resource-centric architectures and simple public APIs. The ecosystem is massive, and caching is straightforward. GraphQL, conversely, shines when building complex client applications that require highly tailored data aggregation from multiple sources without over-fetching or under-fetching. By allowing the client to define the structure of the response, GraphQL drastically reduces network overhead on mobile devices. However, this flexibility comes at the cost of complex backend resolution logic and nuanced performance optimization challenges. Choosing between them isn't about which is definitively better, but which paradigm aligns best with your application's data consumption patterns.",
+    "author": "backend_guru@pixie.com",
+    "tags": ["Programming", "API"],
+    "image": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=800",
+    "likes": 410
+  },
+  {
+    "title": "Ethical Implications of Deepfake Technology",
+    "content": "Deepfakes—synthetic media in which a person in an existing image or video is replaced with someone else's likeness using artificial neural networks—have evolved from a novelty to a profound societal challenge. While the technology has benign applications in entertainment and education, its misuse in creating non-consensual explicit content and political misinformation is alarming. The ability to seamlessly fabricate video evidence undermines trust in digital media and democratic processes. Addressing this requires a multi-faceted approach: advancing detection algorithms, establishing robust legal frameworks to protect victims, and fostering widespread digital literacy. We must strike a delicate balance between fostering AI innovation and mitigating the profound risks these highly accessible technologies pose to privacy and truth.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Technology", "Ethics"],
+    "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+    "likes": 198
+  },
+  {
+    "title": "Predictive Analytics in Modern Healthcare",
+    "content": "Predictive analytics is transforming healthcare from a reactive discipline into a proactive, preventative science. By analyzing vast amounts of historical data, electronic health records, and real-time patient monitoring feeds, machine learning models can identify patterns that humans might miss. These algorithms can forecast disease outbreaks, flag patients at high risk for hospital readmission, and even predict the onset of critical conditions like sepsis hours before symptoms appear. This capability allows healthcare providers to intervene earlier, significantly improving patient outcomes and optimizing resource allocation. However, deploying these models in clinical settings involves navigating complex regulatory environments, ensuring data privacy, and proving rigorous model interpretability so doctors can trust the AI's recommendations.",
+    "author": "health_tech@pixie.com",
+    "tags": ["Data Science", "Technology", "Healthcare"],
+    "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
+    "likes": 315
+  },
+  {
+    "title": "Rust: The Future of Systems Programming?",
+    "content": "Rust has consistently ranked as the most loved programming language, and for good reason: it promises the high performance of C and C++ without the memory safety nightmares. Rust achieves memory safety without a garbage collector through its unique ownership model, catching concurrency bugs and null pointer dereferences at compile time. This strict compiler acts as a rigorous mentor, forcing developers to write safer, concurrent code. High-profile integration into the Linux kernel and rapid adoption by giants like Microsoft and Amazon underscore its enterprise readiness. While the learning curve is infamously steep, the payoff is unparalleled stability in mission-critical systems and blazing-fast web assembly modules. Rust isn't just a trend; it's practically redefining systems development.",
+    "author": "systems_dev@pixie.com",
+    "tags": ["Programming", "Technology"],
+    "image": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&q=80&w=800",
+    "likes": 512
+  },
+  {
+    "title": "Demystifying the MERN Stack",
+    "content": "The MERN stack (MongoDB, Express.js, React, Node.js) remains a dominant force in modern web development. Its primary appeal is the use of a single language—JavaScript—across the entire application lifecycle, drastically reducing context switching for full-stack developers. MongoDB provides a flexible, document-based NoSQL database perfectly suited for JSON data. Express and Node.js form a fast, non-blocking backend infrastructure. React handles the frontend, offering a component-based architecture for building highly interactive user interfaces. While mastering the entire stack requires understanding asynchronous programming, RESTful API design, and state management, it provides unparalleled speed from prototyping to production layout. The MERN stack empowers developers to build comprehensive, scalable web applications with remarkable efficiency.",
+    "author": "demo@user.com",
+    "tags": ["Programming", "Web Dev"],
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800",
+    "likes": 290
+  },
+  {
+    "title": "The Evolution of Natural Language Processing",
+    "content": "Natural Language Processing (NLP) has undergone a dramatic transformation over the past decade. We have moved from rule-based systems and simple statistical models to highly sophisticated deep neural networks, specifically Transformer architectures like BERT and GPT. These models do not just parse grammar; they capture deep contextual nuances, enabling machines to summarize texts, translate languages in real-time, and generate human-like writing. The implications for customer service bots, content creation, and accessibility are enormous. However, current challenges revolve around model bias, energy consumption required for training, and true semantic understanding versus high-dimensional pattern matching. As NLP models grow larger, researchers are focusing on making them more efficient and interpretable.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Data Science"],
+    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "likes": 204
+  },
+  {
+    "title": "Serverless Computing: Pros, Cons, and Use Cases",
+    "content": "Serverless computing abstracts infrastructure management, allowing developers to focus solely on writing and deploying code functions. Platforms like AWS Lambda and Google Cloud Functions automatically scale resources based on demand, and you only pay for the exact compute time consumed. This model drastically reduces operational overhead and can lower costs for intermittent workloads. It's incredibly powerful for building event-driven architectures, API backends, and data processing pipelines. However, serverless is not a silver bullet. Problems like cold starts (delay in executing a function that hasn't run recently), vendor lock-in, and complex debugging in highly distributed microservices can introduce friction. Understanding when to leverage serverless versus traditional containers is key to modern cloud architecture.",
+    "author": "backend_guru@pixie.com",
+    "tags": ["Technology", "Cloud"],
+    "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
+    "likes": 167
+  },
+  {
+    "title": "An Intro to A/B Testing for Data Scientists",
+    "content": "A/B testing is the gold standard for causal inference in product development. It allows companies to answer questions like: 'Does changing the button color increase conversions?' by randomly assigning users to different experiences and comparing outcomes. For data scientists, designing a robust A/B test involves far more than simply looking at averages. It requires determining optimal sample sizes to achieve statistical power, selecting the appropriate metric, and analyzing results using hypothesis testing and confidence intervals. One must be wary of common pitfalls like peeking at results early, Simpson's Paradox, and novel effects. Mastering A/B testing turns raw data into actionable business strategy, proving unequivocally which product iterations drive objective value.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Analytics"],
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+    "likes": 182
+  },
+  {
+    "title": "Cybersecurity in the Age of IoT",
+    "content": "The Internet of Things (IoT) has brought unprecedented convenience, connecting billions of devices from smart thermostats to industrial sensors. However, this massive expansion of the attack surface poses severe cybersecurity challenges. Many IoT devices are shipped with weak default passwords, lack secure firmware update mechanisms, and operate on highly constrained hardware that cannot support robust encryption. Compromised IoT networks can be marshaled into devastating botnets, like the infamous Mirai attack, or act as entry points into sensitive corporate networks. Securing the IoT requires a defense-in-depth strategy: implementing network segmentation, enforcing strong authentication protocols, and holding manufacturers accountable for baseline security standards before deployment.",
+    "author": "security_pro@pixie.com",
+    "tags": ["Technology", "Security"],
+    "image": "https://images.unsplash.com/photo-1510511459019-5d6cbf67ff61?auto=format&fit=crop&q=80&w=800",
+    "likes": 221
+  },
+  {
+    "title": "Why TypeScript is Essential for Large JS Projects",
+    "content": "JavaScript’s dynamic typing makes it incredibly flexible, but as codebases grow to hundreds of thousands of lines, that flexibility often turns into a liability. Refactoring becomes dangerous, and runtime `undefined is not a function` errors soar. TypeScript solves this by introducing static typing to the JavaScript ecosystem. By specifying types for variables, function parameters, and return values, the TypeScript compiler catches entire classes of errors before the code even runs in a browser. Furthermore, it serves as unparalleled self-documenting code, drastically improving the developer experience in modern IDEs through accurate autocomplete and intelligent refactoring tools. For any enterprise-scale Node.js or React project, starting with TypeScript is now widely considered best practice.",
+    "author": "demo@user.com",
+    "tags": ["Programming", "Web Dev"],
+    "image": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800",
+    "likes": 405
+  },
+  {
+    "title": "Generative AI: Creativity Disrupted",
+    "content": "Generative AI models like Midjourney, DALL-E, and advanced text generators are completely disrupting creative industries. These models, trained on vast datasets of human art and literature, can synthesize entirely new images, compose music, and write code from simple prompts. While they offer incredible tools for rapid prototyping and idea generation, they raise profound questions about authorship, copyright infringement, and the future of human creativity. Are these AI tools companions that augment human potential, or direct competitors that will displace illustrators, copywriters, and designers? The industry is currently grappling with how to ethically source training data and ensure fair compensation for original creators while embracing this unstoppable technological advancement.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Technology", "Art"],
+    "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=800",
+    "likes": 312
+  },
+  {
+    "title": "Machine Learning Pipelines with Apache Airflow",
+    "content": "Deploying a machine learning model isn't just about training algorithms; it's about the orchestration of complex data pipelines. Apache Airflow has emerged as the premier open-source tool for programmatically authoring, scheduling, and monitoring workflows. With Airflow, data scientists can define tasks as Directed Acyclic Graphs (DAGs) using pure Python. This allows you to manage intricate dependencies—like waiting for raw data ingestion, executing ETL jobs, triggering model training, and deploying predictions—with complete visibility and retry logic. Mastering Airflow ensures your data workflows are resilient, maintainable, and easily integrated with cloud infrastructure, transforming chaotic ad-hoc scripts into enterprise-grade machine learning automated pipelines.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Programming"],
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+    "likes": 145
+  },
+  {
+    "title": "What is Web3 and Why Should Developers Care?",
+    "content": "Web3 represents the vision for a decentralized internet, built on blockchain technology, smart contracts, and decentralized networks. Unlike Web2, where data and functionality are controlled by a few centralized tech giants, Web3 aims to give users ownership over their digital assets and identities. For developers, Web3 introduces a paradigm shift. Building decentralized applications (dApps) requires learning entirely new concepts: interacting with smart contracts via Solidity, managing cryptographic wallets, and understanding consensus mechanisms. While the space is volatile and currently plagued by speculation, the underlying technology offers profound possibilities for establishing trustless systems, decentralized finance (DeFi), and censorship-resistant applications.",
+    "author": "demo@user.com",
+    "tags": ["Technology", "Programming", "Web3"],
+    "image": "https://images.unsplash.com/photo-1639762681485-074b7f4ec641?auto=format&fit=crop&q=80&w=800",
+    "likes": 260
+  },
+  {
+    "title": "Exploring Explainable AI (XAI)",
+    "content": "As machine learning models, especially deep neural networks, become more complex, they increasingly function as 'black boxes'. Even their creators struggle to understand exactly how inputs translate into outputs. This lack of transparency is a massive barrier to adoption in critical fields like medicine, finance, and criminal justice, where knowing *why* an AI made a decision is as important as the decision itself. Explainable AI (XAI) focuses on creating models and techniques (like LIME or SHAP values) that make the internal mechanics of AI transparent and interpretable by humans. Ensuring trust, regulatory compliance, and identifying hidden biases requires that our most powerful AI systems be understandable to those who use them.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Data Science"],
+    "image": "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&q=80&w=800",
+    "likes": 188
+  },
+  {
+    "title": "The Importance of CI/CD in Agile Environments",
+    "content": "Continuous Integration and Continuous Deployment (CI/CD) pipelines are the backbone of high-performing engineering teams. CI ensures that code changes are automatically built, tested, and merged into the main branch multiple times a day, catching integration errors early. CD extends this by automatically deploying verified code into staging or production environments. Together, they eliminate the dreaded 'it works on my machine' syndrome and the massive risk associated with infrequent, monolithic releases. Implementing a robust CI/CD pipeline using tools like GitHub Actions or Jenkins empowers teams to release features faster, recover from bugs quicker, and maintain high confidence in the quality of their software deliveries.",
+    "author": "backend_guru@pixie.com",
+    "tags": ["Programming", "Technology"],
+    "image": "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&q=80&w=800",
+    "likes": 230
+  },
+  {
+    "title": "A Guide to Data Normalization Techniques",
+    "content": "In relational database design, data normalization is the process of structuring a database to reduce redundancy and improve data integrity. Normalization typically occurs in stages, known as Normal Forms (1NF, 2NF, 3NF, etc.). The goal is to ensure that every non-key column is fully dependent on the primary key, eliminating insertion, deletion, and update anomalies. While extreme normalization guarantees highly consistent data, it can also lead to performance bottlenecks by requiring complex table joins for simple queries. Understanding the trade-offs between normalized database schemas and strategic denormalization is crucial for engineering databases that are both accurate and scalable for heavy read-workloads.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Programming", "Databases"],
+    "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&q=80&w=800",
+    "likes": 115
+  },
+  {
+    "title": "Augmented Reality: The Next Computing Platform?",
+    "content": "While Virtual Reality (VR) immerses users in an entirely synthetic world, Augmented Reality (AR) overlays digital information onto the real-world environment. With major investments from Apple, Meta, and Google, AR glasses are widely anticipated to be the next major computing paradigm, eventually replacing smartphones. The implications span logistics—where warehouse workers see routing paths laid out in front of them—to healthcare, where surgeons can view critical patient vitals overlaid during operations. However, achieving this requires monumental advancements in hyper-efficient microdisplays, persistent spatial mapping algorithms, and battery technology small enough to fit within an aesthetically pleasing frame. The race to build the definitive spatial computing operating system is aggressively underway.",
+    "author": "health_tech@pixie.com",
+    "tags": ["Technology", "Hardware"],
+    "image": "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&q=80&w=800",
+    "likes": 298
+  },
+  {
+    "title": "Computer Vision Applications You Didn't Know About",
+    "content": "Computer vision, the field of enabling machines to 'see' and interpret visual data, powers more than just self-driving cars and facial recognition for unlocking phones. It’s silently revolutionizing diverse sectors. In agriculture, drone-mounted cameras analyzing crop health can detect disease weeks before it's visible to the farmer's eye. In retail, frictionless checkout stores track items seamlessly using thousands of overlapping camera feeds. Environmentalists use satellite imagery powered by CNNs to monitor illegal deforestation and track endangered animal migrations in real-time. As vision models become more accessible and capable of processing video at edge nodes efficiently, their integration into everyday automated systems will only accelerate.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Data Science"],
+    "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=800",
+    "likes": 174
+  },
+  {
+    "title": "JavaScript Promise Chains Explained",
+    "content": "Asynchronous programming in JavaScript historically meant descending into 'Callback Hell,' a deeply nested pyramid of execution that was impossible to debug. Promises revolutionized this by providing a cleaner syntax for handling asynchronous operations. A Promise represents the eventual completion (or failure) of an asynchronous task. By chaining `.then()` and `.catch()` blocks, developers can sequence API calls linearly rather than nesting them. While `async/await` syntax has largely superseded raw `.then()` chains for readability, understanding how Promises execute in the microtask queue, how `Promise.all()` runs tasks concurrently, and handling complex rejections is absolutely vital for robust frontend and Node.js backend development.",
+    "author": "demo@user.com",
+    "tags": ["Programming", "Web Dev"],
+    "image": "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?auto=format&fit=crop&q=80&w=800",
+    "likes": 310
+  },
+  {
+    "title": "Navigating Data Privacy Regulations (GDPR/CCPA)",
+    "content": "The introduction of the GDPR in Europe and the CCPA in California has forever altered how organizations handle user data. Software architecture must now be designed with 'privacy by design' principles from day one. Companies must manage consent rigorously, implement 'right to be forgotten' data deletion pipelines across complex databases, and ensure data masking during non-production testing. Violations carry massive financial penalties and brand damage. For developers and data scientists, this means establishing secure data governance protocols, limiting the scope of collected PII (Personally Identifiable Information), and understanding that data privacy is no longer just a legal issue, but a core engineering requirement.",
+    "author": "security_pro@pixie.com",
+    "tags": ["Technology", "Data Science"],
+    "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800",
+    "likes": 134
+  },
+  {
+    "title": "Introduction to Reinforcement Learning",
+    "content": "Reinforcement Learning (RL) is a captivating branch of AI where an agent learns to make decisions by performing actions in an environment to maximize a cumulative reward. Unlike supervised learning, there is no labeled dataset; the agent learns entirely through trial and error. This is the underlying technology that enabled DeepMind's AlphaGo to defeat world champions in a game previously considered too intuitive for computers. Today, RL is actively used to train robotic manipulation tasks, optimize massive supply chain logistics, and develop adaptive trading algorithms. While mathematically intense and notoriously difficult to train, RL represents the closest approximation to how biological systems learn from interaction.",
+    "author": "ai_researcher@pixie.com",
+    "tags": ["AI", "Data Science", "Programming"],
+    "image": "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&q=80&w=800",
+    "likes": 208
+  },
+  {
+    "title": "Optimizing Web Performance and Core Web Vitals",
+    "content": "In today's fast-paced digital world, web performance directly impacts user retention and search engine rankings. Google's Core Web Vitals—Largest Contentful Paint (LCP), First Input Delay (FID), and Cumulative Layout Shift (CLS)—have become critical metrics. Optimizing LCP requires minimizing render-blocking resources and aggressively optimizing images through WebP formatting and lazy loading. FID is improved by breaking up long-running JavaScript tasks on the main thread. To prevent CLS, developers must ensure images and ads have explicit dimensions so the page layout doesn't unexpectedly jump during load. A modern frontend engineer must treat performance optimization as a continuous process, leveraging audits and real-user monitoring tools.",
+    "author": "demo@user.com",
+    "tags": ["Programming", "Technology"],
+    "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=800",
+    "likes": 255
+  },
+  {
+    "title": "Using Docker for Reproducible Data Science",
+    "content": "Replicating a machine learning experiment shouldn't involve spending hours installing conflicting Python library versions. Docker containers solve this by packaging data science environments—including the operating system, libraries, and code—into isolated, portable units. A `Dockerfile` acts as the blueprint, guaranteeing that whether the code runs on a local MacBook or an AWS cluster, the environment remains identical. This consistency eliminates dependency hell and streamlines collaboration across large data teams. Furthermore, Docker provides an excellent vehicle for deploying complex, multi-model inferencing APIs securely to production. Learning containerization fundamentals is increasingly expected of full-stack data scientists.",
+    "author": "data_expert@pixie.com",
+    "tags": ["Data Science", "Programming"],
+    "image": "https://images.unsplash.com/photo-1605745341112-85968b19335b?auto=format&fit=crop&q=80&w=800",
+    "likes": 288
+  },
+  {
+    "title": "The Evolution of 5G and What 6G Promises",
+    "content": "5G networks are finally reaching broad deployment, bringing gigabit speeds, ultra-low latency, and the capability to connect massive arrays of IoT devices simultaneously. This infrastructure is essential for the realization of smart cities, tele-surgery, and autonomous vehicle coordination. However, telecommunications researchers are already envisioning 6G for the early 2030s. 6G promises to use even higher frequency terahertz bands, aiming for microsecond latencies and data rates 100 times faster than 5G. It aims to deeply integrate AI at the network edge to manage complex signal routing and intends to make holographic communications and high-fidelity digital twins a ubiquitous reality.",
+    "author": "security_pro@pixie.com",
+    "tags": ["Technology", "Hardware"],
+    "image": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800",
+    "likes": 160
+  }
+]
