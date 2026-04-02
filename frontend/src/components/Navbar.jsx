@@ -6,6 +6,7 @@ function Navbar({ darkMode, setDarkMode }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,6 +19,29 @@ function Navbar({ darkMode, setDarkMode }) {
     setActiveLink(path);
   }, [location]);
 
+  // Fetch unread notification count
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const fetchUnread = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const res = await fetch("http://localhost:5000/api/notifications/unread-count", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUnreadCount(data.count);
+        }
+      } catch (err) {
+        // silently ignore
+      }
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000); // poll every 30s
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -29,6 +53,7 @@ function Navbar({ darkMode, setDarkMode }) {
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
     localStorage.removeItem("user_email");
+    localStorage.removeItem("user_name");
     window.location.href = "/login";
   };
 
@@ -67,8 +92,23 @@ function Navbar({ darkMode, setDarkMode }) {
 
         {isAuthenticated && (
           <div className="account-actions">
+            <Link
+              to="/notifications"
+              className="account-btn notif-btn"
+              onClick={() => setMenuOpen(false)}
+              title="Notifications"
+              style={{ position: "relative" }}
+            >
+              🔔
+              {unreadCount > 0 && (
+                <span className="notif-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>
+              )}
+            </Link>
             <Link to={`/user/${currentUserEmail}`} className="account-btn profile-btn" onClick={() => setMenuOpen(false)} title="My Profile">
               👤
+            </Link>
+            <Link to="/settings" className="account-btn settings-btn-nav" onClick={() => setMenuOpen(false)} title="Settings">
+              ⚙️
             </Link>
             <button className="account-btn logout-btn" onClick={handleLogout} title="Logout">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>

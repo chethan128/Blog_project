@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
+import { ToastProvider } from "./components/Toast";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/register";
@@ -12,6 +13,8 @@ import Create from "./pages/create";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UserProfile from "./pages/UserProfile";
+import Settings from "./pages/Settings";
+import Notifications from "./pages/Notifications";
 
 import "./index.css";
 
@@ -93,7 +96,24 @@ const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated
             />
           }
         />
-
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute
+              element={<Settings />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute
+              element={<Notifications />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
       </Routes>
     </>
   );
@@ -133,14 +153,16 @@ function App() {
   if (loading) return null; // avoid flashing
 
   return (
-    <Router>
-      <AppContent
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        isAuthenticated={isAuthenticated}
-        setIsAuthenticated={setIsAuthenticated}
-      />
-    </Router>
+    <ToastProvider>
+      <Router>
+        <AppContent
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
+      </Router>
+    </ToastProvider>
   );
 }
 

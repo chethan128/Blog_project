@@ -1,0 +1,76 @@
+.skeleton-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--card-bg, #161B22);
+    border: 1px solid var(--border-default, #30363D);
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(90deg, #21262D 25%, #30363D 50%, #21262D 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-content {
+    padding: 16px;
+}
+
+.skeleton-line {
+    height: 14px;
+    border-radius: 7px;
+    background: linear-gradient(90deg, #21262D 25%, #30363D 50%, #21262D 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    margin-bottom: 10px;
+}
+
+.skeleton-line.short { width: 60%; }
+.skeleton-line.medium { width: 80%; }
+.skeleton-line.full { width: 100%; }
+.skeleton-line.title { height: 20px; width: 75%; margin-bottom: 14px; }
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #21262D 25%, #30363D 50%, #21262D 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.skeleton-header-lines { flex: 1; }
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    padding: 20px 0;
+}
+
+/* Light mode */
+body.light .skeleton-image,
+body.light .skeleton-line,
+body.light .skeleton-avatar {
+    background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+body.light .skeleton-card {
+    background: #fff;
+    border-color: #E2E8F0;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

@@ -14,8 +14,8 @@
   padding: 50px;
   border-radius: 20px;
   color: var(--text-color);
-  background: var(--form-card-bg, #181830);
-  border: 1px solid var(--form-input-border, #323266);
+  background: var(--form-card-bg, #161B22);
+  border: 1px solid var(--form-input-border, #30363D);
 }
 
 body.light .editor-container {

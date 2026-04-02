@@ -1,11 +1,9 @@
 .navbar {
   width: 100%;
-  padding: 18px 80px 18px 60px;
+  padding: 18px 60px;
 
-  background: var(--navbar-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-color);
+  background: var(--card-bg);
+  color: white;
 
   display: flex;
   justify-content: space-between;
@@ -34,9 +32,8 @@
   flex: 0.15;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   justify-content: flex-end;
-  padding-right: 15px; /* Added spacing so buttons aren't hugging the edge */
 }
 
 .logo {
@@ -72,7 +69,7 @@
 }
 
 .search::placeholder {
-  color: var(--search-placeholder);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .nav-links {
@@ -199,46 +196,10 @@
   }
 }
 
-.account-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.account-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.mode-btn {
+  margin-left: 20px;
+  padding: 6px 12px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
-  text-decoration: none;
-  font-size: 18px;
-  transition: all 0.3s ease;
-}
-
-.profile-btn {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--text-color);
-}
-
-.profile-btn:hover {
-  background: rgba(9, 173, 238, 0.2);
-  border-color: #09adee;
-  transform: scale(1.05);
-}
-
-.logout-btn {
-  background: rgba(255, 59, 48, 0.1);
-  color: #ff3b30;
-  border: 1px solid rgba(255, 59, 48, 0.3);
-}
-
-.logout-btn:hover {
-  background: rgba(255, 59, 48, 0.2);
-  border-color: #ff3b30;
-  transform: scale(1.05);
 }

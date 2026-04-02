@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useToast } from "../components/Toast";
 import "./Post.css";
 
 function Post() {
@@ -7,9 +8,12 @@ function Post() {
   const [post, setPost] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const navigate = useNavigate();
-
   const [hasLiked, setHasLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [relatedPosts, setRelatedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { showSuccess, showError, showInfo } = useToast();
 
   const fetchPostAndProfile = async () => {
     try {
@@ -21,17 +25,15 @@ function Post() {
         const myEmail = localStorage.getItem("user_email");
         const token = localStorage.getItem("token");
 
-        // Register view if the user is logged in, not the author, and token exists
+        // Register view
         if (token && myEmail && postData.author && postData.author !== myEmail) {
           try {
             await fetch(`http://localhost:5000/api/posts/${id}/view`, {
               method: 'PUT',
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
+              headers: { 'Authorization': `Bearer ${token}` }
             });
           } catch (viewErr) {
-            console.error("Failed to register view", viewErr);
+            // silently ignore
           }
         }
 
@@ -43,6 +45,32 @@ function Post() {
             setIsFollowing(profileData.followers?.includes(myEmail));
           }
         }
+
+        // Fetch related posts
+        try {
+          const relRes = await fetch(`http://localhost:5000/api/posts/${id}/related`);
+          if (relRes.ok) {
+            const relData = await relRes.json();
+            setRelatedPosts(relData);
+          }
+        } catch (relErr) {
+          // ignore
+        }
+
+        // Check bookmark status
+        if (token) {
+          try {
+            const bkRes = await fetch(`http://localhost:5000/api/bookmarks/check/${id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (bkRes.ok) {
+              const bkData = await bkRes.json();
+              setIsBookmarked(bkData.bookmarked);
+            }
+          } catch (bkErr) {
+            // ignore
+          }
+        }
       } else {
         setPost(null);
       }
@@ -50,10 +78,13 @@ function Post() {
       console.error("Failed to fetch post:", err);
       setPost(null);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchPostAndProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -68,7 +99,7 @@ function Post() {
   const handleLike = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please login to like posts.");
+      showError("Please login to like posts.");
       return;
     }
 
@@ -82,15 +113,36 @@ function Post() {
           }
         });
         if (res.ok) {
-          fetchPostAndProfile(); // Refresh data to get updated likes correctly
+          fetchPostAndProfile();
         } else {
           const errData = await res.json();
-          console.error("Failed to like post:", errData);
-          alert("Failed to like post: " + (errData.msg || errData.message));
+          showError("Failed to like: " + (errData.msg || errData.message));
         }
       } catch (err) {
-        console.error("Error liking post:", err);
+        showError("Error liking post");
       }
+    }
+  };
+
+  const handleBookmark = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      showError("Please login to save posts.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/bookmarks/${post._id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIsBookmarked(data.bookmarked);
+        showSuccess(data.bookmarked ? "Post saved! 🔖" : "Bookmark removed");
+      }
+    } catch (err) {
+      showError("Failed to bookmark");
     }
   };
 
@@ -98,7 +150,7 @@ function Post() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please login to comment.");
+      showError("Please login to comment.");
       return;
     }
 
@@ -110,23 +162,22 @@ function Post() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({
-            text: commentText
-          })
+          body: JSON.stringify({ text: commentText })
         });
         if (res.ok) {
           setCommentText("");
-          fetchPostAndProfile(); // Refresh data
+          showSuccess("Comment posted! 💬");
+          fetchPostAndProfile();
         }
       } catch (err) {
-        console.error("Error adding comment:", err);
+        showError("Error adding comment");
       }
     }
   };
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    alert("Post link copied to clipboard!");
+    showSuccess("Post link copied! 🔗");
   };
 
   const handleDelete = async () => {
@@ -137,18 +188,17 @@ function Post() {
       try {
         const res = await fetch(`http://localhost:5000/api/posts/${post._id}`, {
           method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
+          showSuccess("Post deleted");
           navigate("/explore");
         } else {
           const errData = await res.json();
-          alert("Failed to delete post: " + (errData.msg || errData.message));
+          showError("Failed to delete: " + (errData.msg || errData.message));
         }
       } catch (err) {
-        console.error("Error deleting post:", err);
+        showError("Error deleting post");
       }
     }
   };
@@ -159,6 +209,41 @@ function Post() {
     navigate("/create", { state: { post } });
   };
 
+  const handleFollow = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      showError("Please login to follow authors.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/auth/follow/${post.author}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIsFollowing(data.following);
+        showInfo(data.following ? "Following! ✨" : "Unfollowed");
+      } else {
+        const errData = await res.json();
+        showError(errData.msg || "Failed to follow user");
+      }
+    } catch (err) {
+      showError("Error following user");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="post-container">
+        <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--text-secondary, #888)" }}>
+          Loading post...
+        </div>
+      </div>
+    );
+  }
+
   if (!post) {
     return (
       <div className="post-container">
@@ -168,37 +253,11 @@ function Post() {
     );
   }
 
-  const handleFollow = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login to follow authors.");
-      return;
-    }
-
-    try {
-      const res = await fetch(`http://localhost:5000/api/auth/follow/${post.author}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setIsFollowing(data.following);
-      } else {
-        const errData = await res.json();
-        alert(errData.msg || "Failed to follow user");
-      }
-    } catch (err) {
-      console.error("Error following user:", err);
-    }
-  };
-
   return (
     <div className="post-container">
       <div className="post-header">
         <h2>{post.title}</h2>
-        <div className="author-meta" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <div className="author-meta" style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
           <span
             className="author-name"
             style={{ fontWeight: "600", color: "var(--primary-color, #6C63FF)", cursor: "pointer" }}
@@ -206,7 +265,11 @@ function Post() {
           >
             {post.author?.split('@')[0] || "Pixie User"}
           </span>
-          <span className="post-date">{post.date || new Date().toLocaleDateString()}</span>
+          <span className="post-date">{new Date(post.createdAt || post.date).toLocaleDateString()}</span>
+          <span className="post-reading-time">📖 {post.readingTime || 1} min read</span>
+          {post.category && (
+            <span className="post-category-badge">{post.category}</span>
+          )}
           {!isAuthor && post.author && (
             <button
               className={`follow-btn ${isFollowing ? "following" : ""}`}
@@ -236,6 +299,15 @@ function Post() {
 
       <div className="post-content" dangerouslySetInnerHTML={{ __html: post.content }} />
 
+      {/* Tags */}
+      {post.tags && post.tags.length > 0 && (
+        <div className="post-tags">
+          {post.tags.map((tag, i) => (
+            <span key={i} className="post-tag">#{tag}</span>
+          ))}
+        </div>
+      )}
+
       <div className="combined-actions-bar">
         <div className="social-actions-group">
           <button className={`action-btn like-btn ${hasLiked ? 'liked' : ''}`} onClick={handleLike}>
@@ -243,6 +315,9 @@ function Post() {
           </button>
           <button className="action-btn share-btn" onClick={handleShare}>
             <span className="icon">🔗</span> Share
+          </button>
+          <button className={`action-btn bookmark-btn ${isBookmarked ? 'bookmarked' : ''}`} onClick={handleBookmark}>
+            <span className="icon">{isBookmarked ? '🔖' : '📑'}</span> {isBookmarked ? 'Saved' : 'Save'}
           </button>
         </div>
 
@@ -288,6 +363,31 @@ function Post() {
           )}
         </div>
       </div>
+
+      {/* Related Posts */}
+      {relatedPosts.length > 0 && (
+        <div className="related-section">
+          <h3>📚 Related Posts</h3>
+          <div className="related-grid">
+            {relatedPosts.map((rp) => (
+              <div
+                key={rp._id}
+                className="related-card"
+                onClick={() => navigate(`/post/${rp._id}`)}
+              >
+                {rp.image && <img src={rp.image} alt={rp.title} className="related-img" />}
+                <div className="related-info">
+                  <span className="related-category">{rp.category || "General"}</span>
+                  <h4>{rp.title}</h4>
+                  <span className="related-meta">
+                    ❤️ {rp.likes || 0} · 📖 {rp.readingTime || 1} min
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

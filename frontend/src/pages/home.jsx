@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 import "./home.css";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const [trendingPosts, setTrendingPosts] = useState([]);
+  const [stats, setStats] = useState({ totalPosts: 0, totalUsers: 0, totalComments: 0 });
+  const [animatedStats, setAnimatedStats] = useState({ totalPosts: 0, totalUsers: 0, totalComments: 0 });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,17 +17,64 @@ function Home() {
         if (res.ok) {
           const data = await res.json();
           setPosts(data);
-        } else {
-          console.error("Failed to fetch posts");
         }
       } catch (err) {
         console.error("Failed to fetch posts:", err);
       }
     };
+
+    const fetchTrending = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/posts/trending");
+        if (res.ok) {
+          const data = await res.json();
+          setTrendingPosts(data.slice(0, 4));
+        }
+      } catch (err) {
+        console.error("Failed to fetch trending:", err);
+      }
+    };
+
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/posts/stats/overview");
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch stats:", err);
+      }
+    };
+
     fetchPosts();
+    fetchTrending();
+    fetchStats();
   }, []);
 
-  const recentPosts = posts.slice(0, 6); // Show only 6 recent posts
+  // Animated counter effect
+  useEffect(() => {
+    const duration = 1500;
+    const steps = 40;
+    const interval = duration / steps;
+
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      setAnimatedStats({
+        totalPosts: Math.round(stats.totalPosts * eased),
+        totalUsers: Math.round(stats.totalUsers * eased),
+        totalComments: Math.round(stats.totalComments * eased),
+      });
+      if (step >= steps) clearInterval(timer);
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [stats]);
+
+  const recentPosts = posts.slice(0, 6);
 
   const categories = [
     { name: "Technology", icon: "💻", description: "The latest in coding and hardware" },
@@ -39,12 +90,27 @@ function Home() {
         <div className="hero-content">
           <h1>✨ Pixie Pages</h1>
           <p className="hero-subtitle">Discover beautiful stories shared by the community</p>
-          <button
-            className="hero-btn"
-            onClick={() => navigate("/explore")}
-          >
+          <button className="hero-btn" onClick={() => navigate("/explore")}>
             Explore All Posts →
           </button>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="stats-section">
+        <div className="stats-grid">
+          <div className="stat-card glass-effect">
+            <span className="stat-number">{animatedStats.totalPosts}</span>
+            <span className="stat-label-home">Stories Published</span>
+          </div>
+          <div className="stat-card glass-effect">
+            <span className="stat-number">{animatedStats.totalUsers}</span>
+            <span className="stat-label-home">Active Writers</span>
+          </div>
+          <div className="stat-card glass-effect">
+            <span className="stat-number">{animatedStats.totalComments}</span>
+            <span className="stat-label-home">Comments Shared</span>
+          </div>
         </div>
       </div>
 
@@ -75,18 +141,41 @@ function Home() {
         </div>
       </div>
 
+      {/* Trending Posts Section */}
+      {trendingPosts.length > 0 && (
+        <div className="trending-section">
+          <h2>🔥 Trending Right Now</h2>
+          <div className="trending-grid">
+            {trendingPosts.map((post) => (
+              <div
+                key={post._id}
+                className="trending-card glass-effect"
+                onClick={() => navigate(`/post/${post._id}`)}
+              >
+                {post.image && <img src={post.image} alt={post.title} className="trending-img" />}
+                <div className="trending-info">
+                  <span className="trending-category">{post.category || "General"}</span>
+                  <h3>{post.title}</h3>
+                  <div className="trending-meta">
+                    <span>❤️ {post.likes || 0}</span>
+                    <span>👁️ {post.viewsCount || 0}</span>
+                    <span>📖 {post.readingTime || 1} min</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Featured Blogs Section */}
       <div className="featured-section">
         <h2>Featured Blogs</h2>
-
         {recentPosts.length === 0 ? (
           <div className="empty-state">
             <h4>No posts yet.</h4>
             <p>Be the first to share your story!</p>
-            <button
-              className="create-btn"
-              onClick={() => navigate("/create")}
-            >
+            <button className="create-btn" onClick={() => navigate("/create")}>
               Write a Story
             </button>
           </div>
@@ -94,31 +183,26 @@ function Home() {
           <>
             <div className="posts-grid">
               {recentPosts.map((post) => (
-                <div
-                  key={post._id}
-                  className="post-card"
-                  onClick={() => navigate(`/post/${post._id}`)}
-                >
+                <div key={post._id} className="post-card" onClick={() => navigate(`/post/${post._id}`)}>
                   {post.image && <img src={post.image} alt={post.title} />}
                   <div className="post-info">
+                    <div className="post-card-meta">
+                      <span className="post-card-category">{post.category || "General"}</span>
+                      <span className="post-card-reading">📖 {post.readingTime || 1} min</span>
+                    </div>
                     <h3>{post.title}</h3>
-                    <span className="post-date">{post.date}</span>
                     <p>
                       {post.content.length > 120
-                        ? post.content.slice(0, 120) + "..."
-                        : post.content}
+                        ? post.content.replace(/<[^>]*>/g, '').slice(0, 120) + "..."
+                        : post.content.replace(/<[^>]*>/g, '')}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-
             {posts.length > 6 && (
               <div className="view-more">
-                <button
-                  className="view-more-btn"
-                  onClick={() => navigate("/explore")}
-                >
+                <button className="view-more-btn" onClick={() => navigate("/explore")}>
                   View All {posts.length} Posts →
                 </button>
               </div>
@@ -132,11 +216,7 @@ function Home() {
         <h2>Explore Categories</h2>
         <div className="categories-grid">
           {categories.map((cat, index) => (
-            <div
-              key={index}
-              className="category-card"
-              onClick={() => navigate('/explore')}
-            >
+            <div key={index} className="category-card" onClick={() => navigate('/explore')}>
               <div className="category-icon">{cat.icon}</div>
               <h3>{cat.name}</h3>
               <p>{cat.description}</p>
@@ -145,13 +225,18 @@ function Home() {
         </div>
       </div>
 
-      {/* Basic Footer */}
-      <footer className="home-footer">
-        <div className="footer-content">
-          <div className="footer-logo">✨ Pixie Pages</div>
-          <p>© {new Date().getFullYear()} Pixie Pages. All rights reserved.</p>
+      {/* Newsletter/CTA Section */}
+      <div className="cta-section">
+        <div className="cta-content glass-effect">
+          <h2>📬 Ready to Start Writing?</h2>
+          <p>Join our community of passionate storytellers and share your voice with the world.</p>
+          <button className="cta-btn" onClick={() => navigate("/create")}>
+            Start Writing Now ✨
+          </button>
         </div>
-      </footer>
+      </div>
+
+      <Footer />
     </div>
   );
 }

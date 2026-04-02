@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../components/Toast";
 import "./dashboard.css";
 
 function Dashboard({ setIsAuthenticated }) {
@@ -7,7 +8,9 @@ function Dashboard({ setIsAuthenticated }) {
   const userEmail = localStorage.getItem("user_email") || "Guest";
   const userName = userEmail.split("@")[0];
   const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState("my_posts"); // 'my_posts' or 'saved'
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [activeTab, setActiveTab] = useState("my_posts");
+  const { showSuccess, showError } = useToast();
 
   // Profile State
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -67,12 +70,12 @@ function Dashboard({ setIsAuthenticated }) {
           profileImage: data.profileImage || "",
         });
         setIsEditingProfile(false);
+        showSuccess("Profile updated! ✨");
       } else {
-        alert("Failed to save profile");
+        showError("Failed to save profile");
       }
     } catch (err) {
-      console.error("Failed to save profile:", err);
-      alert("Error saving profile");
+      showError("Error saving profile");
     }
   };
 
@@ -93,27 +96,42 @@ function Dashboard({ setIsAuthenticated }) {
       const res = await fetch("http://localhost:5000/api/posts");
       if (res.ok) {
         const data = await res.json();
-        // Since we don't have true auth yet, we'll just filter by the email we saved as author
         if (Array.isArray(data)) {
           const myPosts = data.filter(p => p.author === userEmail);
           const sorted = myPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           setPosts(sorted);
         } else {
-          console.error("Expected array but got:", data);
           setPosts([]);
         }
       } else {
-        console.error("Failed to fetch user posts. Status:", res.status);
         setPosts([]);
       }
     } catch (err) {
-      console.error("Failed to fetch user posts:", err);
       setPosts([]);
+    }
+  };
+
+  // Fetch real bookmarked posts
+  const fetchBookmarks = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:5000/api/bookmarks", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSavedPosts(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch bookmarks:", err);
     }
   };
 
   useEffect(() => {
     fetchUserPosts();
+    fetchBookmarks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userEmail]);
 
   const handleLogout = () => {
@@ -126,8 +144,6 @@ function Dashboard({ setIsAuthenticated }) {
     navigate("/login");
   };
 
-  // For UI demo purposes, we will treat posts with likes > 0 as "Saved"
-  const savedPosts = posts.filter(p => p.likes && p.likes > 0);
   const displayPosts = activeTab === "my_posts" ? posts : savedPosts;
 
   return (
@@ -153,6 +169,9 @@ function Dashboard({ setIsAuthenticated }) {
               </button>
               <button className="dashboard-action-btn write-btn" onClick={() => navigate("/create")}>
                 Write Story
+              </button>
+              <button className="dashboard-action-btn settings-nav-btn" onClick={() => navigate("/settings")}>
+                ⚙️ Settings
               </button>
               <button className="dashboard-action-btn logout-outline-btn" onClick={handleLogout}>
                 Logout
@@ -183,12 +202,12 @@ function Dashboard({ setIsAuthenticated }) {
             <div className="profile-details">
               {profileData.location && (
                 <span className="detail-item">
-                  <span className="material-icon">location_on</span> {profileData.location}
+                  📍 {profileData.location}
                 </span>
               )}
               {profileData.website && (
                 <span className="detail-item">
-                  <span className="material-icon">link</span> <a href={profileData.website} target="_blank" rel="noreferrer">{profileData.website}</a>
+                  🔗 <a href={profileData.website} target="_blank" rel="noreferrer">{profileData.website}</a>
                 </span>
               )}
             </div>
@@ -202,25 +221,30 @@ function Dashboard({ setIsAuthenticated }) {
           className={`tab-item ${activeTab === "my_posts" ? "active" : ""}`}
           onClick={() => setActiveTab("my_posts")}
         >
-          <span className="material-icon">article</span> My Posts
+          📝 My Posts
         </div>
         <div
           className={`tab-item ${activeTab === "saved" ? "active" : ""}`}
           onClick={() => setActiveTab("saved")}
         >
-          <span className="material-icon">bookmark_border</span> Saved
+          🔖 Saved ({savedPosts.length})
         </div>
       </div>
 
       {/* Profile Grid */}
       {displayPosts.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📝</div>
+          <div className="empty-icon">{activeTab === "saved" ? "🔖" : "📝"}</div>
           <h3>No {activeTab === "saved" ? "saved stories" : "stories"} yet</h3>
-          <p>{activeTab === "saved" ? "Like a post to save it here." : "Start sharing your thoughts with the world"}</p>
+          <p>{activeTab === "saved" ? "Save posts from the Explore page and they'll show up here." : "Start sharing your thoughts with the world"}</p>
           {activeTab === "my_posts" && (
             <button className="create-btn" onClick={() => navigate("/create")}>
               Create Your First Post
+            </button>
+          )}
+          {activeTab === "saved" && (
+            <button className="create-btn" onClick={() => navigate("/explore")}>
+              Explore Posts
             </button>
           )}
         </div>

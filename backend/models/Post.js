@@ -57,4 +57,19 @@ const postSchema = new mongoose.Schema({
     },
 });
 
+// Text index for search
+postSchema.index({ title: 'text', content: 'text' });
+
+// Virtual field for reading time
+postSchema.virtual('readingTime').get(function () {
+    if (!this.content) return 1;
+    const wordCount = this.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(w => w.length > 0).length;
+    const minutes = Math.ceil(wordCount / 200);
+    return minutes < 1 ? 1 : minutes;
+});
+
+// Ensure virtuals are included in JSON
+postSchema.set('toJSON', { virtuals: true });
+postSchema.set('toObject', { virtuals: true });
+
 module.exports = mongoose.model('Post', postSchema);

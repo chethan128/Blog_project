@@ -79,8 +79,8 @@
 }
 
 body.dark .ig-avatar-ring {
-    background: #121212;
-    border-color: #262626;
+    background: #0D1117;
+    border-color: #30363D;
 }
 
 .ig-avatar-img {
@@ -148,7 +148,7 @@ body.dark .ig-btn-secondary {
 }
 
 body.dark .ig-btn-secondary:hover {
-    background: #262626;
+    background: #21262D;
 }
 
 .ig-btn-logout {
@@ -231,7 +231,7 @@ body.dark .ig-website-link {
 }
 
 body.dark .ig-tabs-container {
-    border-top-color: #262626;
+    border-top-color: #30363D;
 }
 
 .ig-tab {
@@ -280,7 +280,7 @@ body.dark .ig-tabs-container {
 }
 
 body.dark .ig-grid-item {
-    background-color: #262626;
+    background-color: #21262D;
 }
 
 .ig-grid-img {

@@ -1,7 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const User = require('../models/User');
+const Notification = require('../models/Notification');
 const auth = require('../middleware/auth');
+
+// Search posts (must be before /:id to avoid conflict)
+router.get('/search', async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || !q.trim()) {
+            return res.json([]);
+        }
+        const posts = await Post.find(
+            { $text: { $search: q } },
+            { score: { $meta: 'textScore' } }
+        ).sort({ score: { $meta: 'textScore' } }).limit(20);
+        res.json(posts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get trending posts (most liked + viewed in last 7 days)
+router.get('/trending', async (req, res) => {
+    try {
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const posts = await Post.find({ createdAt: { $gte: sevenDaysAgo } })
+            .sort({ likes: -1, viewsCount: -1 })
+            .limit(6);
+        
+        // If not enough recent posts, fallback to all-time popular
+        if (posts.length < 3) {
+            const allTimeTrending = await Post.find()
+                .sort({ likes: -1, viewsCount: -1 })
+                .limit(6);
+            return res.json(allTimeTrending);
+        }
+        res.json(posts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // Get all posts (sorted newest first by default), optionally filtered by category
 router.get('/', async (req, res) => {
@@ -38,12 +78,32 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Get related posts (same category, exclude current)
+router.get('/:id/related', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+
+        const related = await Post.find({
+            _id: { $ne: post._id },
+            $or: [
+                { category: post.category },
+                { tags: { $in: post.tags || [] } }
+            ]
+        })
+        .sort({ likes: -1, createdAt: -1 })
+        .limit(4);
+        
+        res.json(related);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // Create new post
 router.post('/', auth, async (req, res) => {
     try {
-        const User = require('../models/User');
         const user = await User.findById(req.user.id);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -54,7 +114,7 @@ router.post('/', auth, async (req, res) => {
             image: req.body.image,
             tags: req.body.tags || [],
             category: req.body.category || 'General',
-            author: user.email // Enforce author from the verified token
+            author: user.email
         });
 
         const newPost = await post.save();
@@ -72,9 +132,7 @@ router.put('/:id', auth, async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        const User = require('../models/User');
         const user = await User.findById(req.user.id);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -102,20 +160,11 @@ router.delete('/:id', auth, async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        // Verify that the user attempting to delete is the original author
-        // We compare the post author string against the decoded token's user email
-        // Note: The User model doesn't store email directly in req.user by default from our auth middleware
-        // Let's fetch the user to get their email if needed, or rely on token contents if we put email in it.
-        // In backend/routes/auth.js login/register, the token payload is simply { user: { id: user.id } }.
-        // So we must fetch the user by ID first.
-        const User = require('../models/User'); // Required to fetch the user
         const user = await User.findById(req.user.id);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // The post author field currently stores the email string (e.g., 'test@example.com')
         if (post.author !== user.email) {
             return res.status(403).json({ message: 'User not authorized to delete this post' });
         }
@@ -130,7 +179,7 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-// Like/Unlike post (Protected Route)
+// Like/Unlike post (Protected Route) — also creates notification
 router.put('/:id/like', auth, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -138,15 +187,25 @@ router.put('/:id/like', auth, async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        // Check if user has already liked the post
         const index = post.likedBy.indexOf(req.user.id);
 
         if (index === -1) {
-            // User hasn't liked it yet, so add them
             post.likedBy.push(req.user.id);
-            post.likes = post.likedBy.length; // Keep standard 'likes' count sync'd for backwards compatibility
+            post.likes = post.likedBy.length;
+
+            // Create notification for post author (if not self-liking)
+            const liker = await User.findById(req.user.id);
+            const postAuthor = await User.findOne({ email: post.author });
+            if (postAuthor && postAuthor._id.toString() !== req.user.id) {
+                await Notification.create({
+                    type: 'like',
+                    sender: req.user.id,
+                    receiver: postAuthor._id,
+                    post: post._id,
+                    message: `${liker.name} liked your post "${post.title}"`
+                });
+            }
         } else {
-            // User already liked it, so remove them (unlike)
             post.likedBy.splice(index, 1);
             post.likes = post.likedBy.length;
         }
@@ -169,19 +228,15 @@ router.put('/:id/view', auth, async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        const User = require('../models/User');
         const user = await User.findById(req.user.id);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check if author is trying to view their own post
         if (post.author === user.email) {
             return res.json({ message: 'Author view, not counted', viewsCount: post.viewsCount });
         }
 
-        // Check if user has already viewed the post
         if (!post.viewedBy.includes(req.user.id)) {
             post.viewedBy.push(req.user.id);
             post.viewsCount = post.viewedBy.length;
@@ -197,29 +252,59 @@ router.put('/:id/view', auth, async (req, res) => {
     }
 });
 
-// Add comment (Protected)
+// Add comment (Protected) — also creates notification
 router.post('/:id/comments', auth, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) return res.status(404).json({ message: 'Post not found' });
 
-        const User = require('../models/User');
         const user = await User.findById(req.user.id);
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         post.comments.push({
             text: req.body.text,
-            author: user.email, // Use authenticated user's email instead of relying on frontend payload
+            author: user.email,
             date: new Date()
         });
 
         const updatedPost = await post.save();
+
+        // Create notification for post author (if not self-commenting)
+        const postAuthor = await User.findOne({ email: post.author });
+        if (postAuthor && postAuthor._id.toString() !== req.user.id) {
+            await Notification.create({
+                type: 'comment',
+                sender: req.user.id,
+                receiver: postAuthor._id,
+                post: post._id,
+                message: `${user.name} commented on your post "${post.title}"`
+            });
+        }
+
         res.json(updatedPost);
     } catch (err) {
         res.status(400).json({ message: err.message });
+    }
+});
+
+// Get stats (public) for home page
+router.get('/stats/overview', async (req, res) => {
+    try {
+        const totalPosts = await Post.countDocuments();
+        const totalUsers = await User.countDocuments();
+        const totalComments = await Post.aggregate([
+            { $project: { commentCount: { $size: { $ifNull: ['$comments', []] } } } },
+            { $group: { _id: null, total: { $sum: '$commentCount' } } }
+        ]);
+        res.json({
+            totalPosts,
+            totalUsers,
+            totalComments: totalComments[0]?.total || 0
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 

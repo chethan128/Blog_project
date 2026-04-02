@@ -1,36 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   /* Core Typography */
-  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  /* base colors for SaaS Dark Theme */
-  --bg-gradient: #0F0F1A;
-  --text-color: #FFFFFF;
-  --card-bg: #1C1C34;
-  --input-bg: #24244A;
-  --input-text: #EAEAFF;
-  --heading-color: #FFFFFF;
-  --subtext-color: #A0A0C0;
-  --search-placeholder: rgba(255, 255, 255, 0.5);
+  /* ========================================
+     GITHUB / VS CODE INSPIRED DARK THEME
+     Soft dark — easy on the eyes
+     ======================================== */
 
-  /* Accent Palette */
-  --primary-gradient: linear-gradient(135deg, #6C63FF 0%, #7D75FF 100%);
-  --primary-color: #6C63FF;
-  --primary-hover: #7D75FF;
-  --secondary-color: #FF7A18;
-  --success-color: #22C55E;
+  /* Background layers */
+  --bg-gradient: #0D1117;
+  --card-bg: #161B22;
+  --input-bg: #0D1117;
 
-  --overlay-bg: rgba(15, 15, 26, 0.9);
-  --input-border: #2E2E55;
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  /* Text colors */
+  --text-color: #E6EDF3;
+  --heading-color: #F0F6FC;
+  --subtext-color: #8B949E;
+  --input-text: #E6EDF3;
+  --search-placeholder: rgba(139, 148, 158, 0.7);
 
-  /* Component specific dark mode vars */
-  --navbar-bg: #1B1B2F;
-  --navbar-border: #2A2A40;
-  --navbar-hover: #6C63FF;
-  --action-bar-bg: #16162B;
-  --form-card-bg: #181830;
-  --form-input-border: #323266;
+  /* Accent palette */
+  --primary-gradient: linear-gradient(135deg, #58A6FF 0%, #79C0FF 100%);
+  --primary-color: #58A6FF;
+  --primary-hover: #79C0FF;
+  --secondary-color: #F78166;
+  --success-color: #238636;
+  --like-color: #FF6B6B;
+
+  /* Borders & Surfaces */
+  --input-border: #30363D;
+  --overlay-bg: rgba(13, 17, 23, 0.92);
+  --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+  /* Component specific */
+  --navbar-bg: #161B22;
+  --navbar-border: #21262D;
+  --navbar-hover: #58A6FF;
+  --action-bar-bg: #161B22;
+  --action-bar-border: #30363D;
+  --form-card-bg: #161B22;
+  --form-input-border: #30363D;
+
+  /* Elevated surfaces */
+  --surface-1: #161B22;
+  --surface-2: #21262D;
+  --surface-3: #30363D;
+  --border-default: #30363D;
+  --border-muted: #21262D;
 }
 
 body {
@@ -40,33 +59,40 @@ body {
   color: var(--text-color);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 body.light {
-  /* Premium Light Mode Palette (Modern SaaS) */
-  --bg-gradient: linear-gradient(135deg, #F0F4FF 0%, #F9F5FF 50%, #F0FAFF 100%);
-  --text-color: #1a1a2e;
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --input-bg: rgba(255, 255, 255, 0.95);
-  --input-text: #1a1a2e;
-  --heading-color: #0f0f1a;
-  --subtext-color: #555b6e;
-  --overlay-bg: rgba(255, 255, 255, 0.75);
-  --input-border: #D1D5E8;
-  --glass-shadow: 0px 8px 32px rgba(108, 99, 255, 0.08);
+  /* Premium Light Mode Palette */
+  --bg-gradient: #F8FAFC;
+  --text-color: #0F172A;
+  --card-bg: #FFFFFF;
+  --input-bg: #FFFFFF;
+  --input-text: #0F172A;
+  --heading-color: #0F172A;
+  --subtext-color: #475569;
+  --overlay-bg: rgba(255, 255, 255, 0.85);
+  --input-border: #E2E8F0;
+  --glass-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 
-  /* Component specific light mode vars */
-  --navbar-bg: rgba(255, 255, 255, 0.65);
-  --navbar-border: rgba(255, 255, 255, 0.3);
-  --navbar-hover: #5A52E0;
-  --action-bar-bg: rgba(255, 255, 255, 0.7);
-  --action-bar-border: rgba(209, 213, 232, 0.5);
-  --form-card-bg: rgba(255, 255, 255, 0.9);
-  --form-input-border: #D1D5E8;
-  --form-placeholder: #8b93a6;
-  --primary-color: #5A52E0; /* Deepened primary for better contrast */
-  --primary-hover: #4B41E6;
-  --search-placeholder: #8b93a6;
+  --navbar-bg: rgba(255, 255, 255, 0.9);
+  --navbar-border: #E2E8F0;
+  --navbar-hover: #2563EB;
+  --action-bar-bg: #FFFFFF;
+  --action-bar-border: #E2E8F0;
+  --form-card-bg: #FFFFFF;
+  --form-input-border: #E2E8F0;
+  --form-placeholder: #64748B;
+  --primary-color: #2563EB;
+  --primary-hover: #1D4ED8;
+  --success-color: #2563EB;
+  --search-placeholder: #64748B;
+  --surface-1: #FFFFFF;
+  --surface-2: #F1F5F9;
+  --surface-3: #E2E8F0;
+  --border-default: #E2E8F0;
+  --border-muted: #F1F5F9;
 }
 
 /* Base utility for glass cards */
@@ -74,7 +100,7 @@ body.light {
   background: var(--card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--input-border);
+  border: 1px solid var(--border-default);
   box-shadow: var(--glass-shadow);
 }
 
@@ -87,4 +113,37 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--input-text) !important;
   transition: background-color 5000s ease-in-out 0s;
   background-clip: content-box !important;
+}
+
+/* Global selection color */
+::selection {
+  background: rgba(88, 166, 255, 0.3);
+  color: #F0F6FC;
+}
+
+/* Scrollbar styling for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-gradient);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484F58;
+}
+
+body.light ::-webkit-scrollbar-track {
+  background: #F6F8FA;
+}
+
+body.light ::-webkit-scrollbar-thumb {
+  background: #D0D7DE;
 }
