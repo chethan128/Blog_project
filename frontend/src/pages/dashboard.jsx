@@ -141,7 +141,7 @@ function Dashboard({ setIsAuthenticated }) {
     localStorage.removeItem("user_id");
     localStorage.removeItem("posts");
     setIsAuthenticated(false);
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   const displayPosts = activeTab === "my_posts" ? posts : savedPosts;

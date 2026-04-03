@@ -1,0 +1,184 @@
+.drafts-container {
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.drafts-header {
+  margin-bottom: 32px;
+}
+
+.drafts-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 6px;
+}
+
+.drafts-header p {
+  color: var(--subtext-color);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Empty State */
+.drafts-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--card-bg);
+  border: 1px dashed var(--border-default);
+  border-radius: 16px;
+}
+
+.drafts-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.drafts-empty h3 {
+  font-size: 20px;
+  color: var(--heading-color);
+  margin: 0 0 8px;
+}
+
+.drafts-empty p {
+  color: var(--subtext-color);
+  margin: 0 0 24px;
+}
+
+.drafts-create-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary-gradient);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.drafts-create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(88, 166, 255, 0.3);
+}
+
+/* Draft List */
+.drafts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.draft-card {
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: cardFadeIn 0.3s ease-out both;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.draft-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.draft-badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(247, 129, 102, 0.12);
+  color: #F78166;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.draft-time {
+  font-size: 12px;
+  color: var(--subtext-color);
+}
+
+.draft-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.draft-excerpt {
+  font-size: 14px;
+  color: var(--subtext-color);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.draft-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.draft-tag {
+  font-size: 12px;
+  color: var(--subtext-color);
+  background: var(--surface-2);
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+.draft-card-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-muted);
+}
+
+.draft-edit-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.draft-edit-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.draft-delete-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--subtext-color);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.draft-delete-btn:hover {
+  border-color: #F85149;
+  color: #F85149;
+  background: rgba(248, 81, 73, 0.06);
+}

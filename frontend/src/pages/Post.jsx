@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useToast } from "../components/Toast";
 import "./Post.css";
@@ -12,8 +12,36 @@ function Post() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [readProgress, setReadProgress] = useState(0);
   const navigate = useNavigate();
   const { showSuccess, showError, showInfo } = useToast();
+
+  // Reading progress bar
+  const handleScroll = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0) {
+      setReadProgress(Math.min((scrollTop / docHeight) * 100, 100));
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  // Relative time helper
+  const timeAgo = (date) => {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}d ago`;
+    return new Date(date).toLocaleDateString();
+  };
 
   const fetchPostAndProfile = async () => {
     try {
@@ -255,6 +283,8 @@ function Post() {
 
   return (
     <div className="post-container">
+      {/* Reading Progress Bar */}
+      <div className="reading-progress-bar" style={{ width: `${readProgress}%` }} />
       <div className="post-header">
         <h2>{post.title}</h2>
         <div className="author-meta" style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
@@ -265,8 +295,7 @@ function Post() {
           >
             {post.author?.split('@')[0] || "Pixie User"}
           </span>
-          <span className="post-date">{new Date(post.createdAt || post.date).toLocaleDateString()}</span>
-          <span className="post-reading-time">📖 {post.readingTime || 1} min read</span>
+          <span className="post-date">{new Date(post.createdAt || post.date).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>
           {post.category && (
             <span className="post-category-badge">{post.category}</span>
           )}
@@ -351,13 +380,16 @@ function Post() {
           ) : (
             post.comments.map((comment) => (
               <div key={comment._id || Math.random()} className="comment-bubble">
-                <div className="comment-header">
-                  <span className="comment-author">{comment.author?.split('@')[0] || "Guest"}</span>
-                  <span className="comment-date">
-                    {new Date(comment.date).toLocaleDateString()}
-                  </span>
+                <div className="comment-avatar">
+                  {(comment.author?.split('@')[0] || "G").charAt(0).toUpperCase()}
                 </div>
-                <p className="comment-text">{comment.text}</p>
+                <div className="comment-body">
+                  <div className="comment-header">
+                    <span className="comment-author">{comment.author?.split('@')[0] || "Guest"}</span>
+                    <span className="comment-date">{timeAgo(comment.date)}</span>
+                  </div>
+                  <p className="comment-text">{comment.text}</p>
+                </div>
               </div>
             ))
           )}
@@ -375,12 +407,12 @@ function Post() {
                 className="related-card"
                 onClick={() => navigate(`/post/${rp._id}`)}
               >
-                {rp.image && <img src={rp.image} alt={rp.title} className="related-img" />}
+                {rp.image && <img src={rp.image} alt={rp.title} className="related-img" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600/E2E8F0/64748B?text=Pixie+Pages'; }}/>}
                 <div className="related-info">
                   <span className="related-category">{rp.category || "General"}</span>
                   <h4>{rp.title}</h4>
                   <span className="related-meta">
-                    ❤️ {rp.likes || 0} · 📖 {rp.readingTime || 1} min
+                    ❤️ {rp.likes || 0} · {new Date(rp.createdAt || rp.date).toLocaleString('en-US', { month: 'short', day: 'numeric' })}
                   </span>
                 </div>
               </div>

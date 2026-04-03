@@ -55,10 +55,20 @@ const postSchema = new mongoose.Schema({
         type: String,
         default: 'General',
     },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 // Text index for search
 postSchema.index({ title: 'text', content: 'text' });
+
+// Compound indexes for common queries
+postSchema.index({ author: 1, createdAt: -1 });
+postSchema.index({ category: 1, createdAt: -1 });
+postSchema.index({ status: 1, createdAt: -1 });
+postSchema.index({ likes: -1, viewsCount: -1 });
 
 // Virtual field for reading time
 postSchema.virtual('readingTime').get(function () {

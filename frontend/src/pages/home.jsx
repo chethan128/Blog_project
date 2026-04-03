@@ -16,7 +16,7 @@ function Home() {
         const res = await fetch("http://localhost:5000/api/posts");
         if (res.ok) {
           const data = await res.json();
-          setPosts(data);
+          setPosts(data.posts || []);
         }
       } catch (err) {
         console.error("Failed to fetch posts:", err);
@@ -152,15 +152,26 @@ function Home() {
                 className="trending-card glass-effect"
                 onClick={() => navigate(`/post/${post._id}`)}
               >
-                {post.image && <img src={post.image} alt={post.title} className="trending-img" />}
+                {post.image && <img src={post.image} alt={post.title} className="trending-img" onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/E2E8F0/64748B?text=Pixie+Pages'; }} />}
                 <div className="trending-info">
-                  <span className="trending-category">{post.category || "General"}</span>
+                  <div className="trending-top-row">
+                    <span className="trending-category">{post.category || "General"}</span>
+                    <span className="trending-read-time">📖 {post.readingTime || 1} min</span>
+                  </div>
                   <h3>{post.title}</h3>
                   <div className="trending-meta">
+                    <span className="trending-author-avatar">{(post.author?.split('@')[0] || 'P').charAt(0).toUpperCase()}</span>
+                    <span>{post.author?.split('@')[0] || 'Pixie User'}</span>
                     <span>❤️ {post.likes || 0}</span>
                     <span>👁️ {post.viewsCount || 0}</span>
-                    <span>📖 {post.readingTime || 1} min</span>
                   </div>
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="trending-tags">
+                      {post.tags.slice(0, 2).map((tag, i) => (
+                        <span key={i} className="trending-tag">#{tag}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -182,13 +193,15 @@ function Home() {
         ) : (
           <>
             <div className="posts-grid">
-              {recentPosts.map((post) => (
+              {recentPosts.map((post) => {
+                const displayTime = new Date(post.createdAt || post.date).toLocaleString('en-US', { month: 'short', day: 'numeric' });
+                return (
                 <div key={post._id} className="post-card" onClick={() => navigate(`/post/${post._id}`)}>
-                  {post.image && <img src={post.image} alt={post.title} />}
+                  {post.image && <img src={post.image} alt={post.title} onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600/E2E8F0/64748B?text=Pixie+Pages'; }} />}
                   <div className="post-info">
                     <div className="post-card-meta">
                       <span className="post-card-category">{post.category || "General"}</span>
-                      <span className="post-card-reading">📖 {post.readingTime || 1} min</span>
+                      <span className="post-card-read-time">📖 {post.readingTime || 1} min</span>
                     </div>
                     <h3>{post.title}</h3>
                     <p>
@@ -196,9 +209,24 @@ function Home() {
                         ? post.content.replace(/<[^>]*>/g, '').slice(0, 120) + "..."
                         : post.content.replace(/<[^>]*>/g, '')}
                     </p>
+                    <div className="post-card-footer">
+                      <div className="post-card-author">
+                        <span className="post-card-avatar">{(post.author?.split('@')[0] || 'P').charAt(0).toUpperCase()}</span>
+                        <span className="post-card-author-name">{post.author?.split('@')[0] || 'Pixie User'}</span>
+                      </div>
+                      <span className="post-card-date">{displayTime}</span>
+                    </div>
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="post-card-tags">
+                        {post.tags.slice(0, 2).map((tag, i) => (
+                          <span key={i} className="post-card-tag">#{tag}</span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
             {posts.length > 6 && (
               <div className="view-more">

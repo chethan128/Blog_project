@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./register.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "../components/Toast";
 
 
 function Register() {
@@ -16,6 +17,7 @@ function Register() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const handleChange = (e) => {
     setFormData({
@@ -77,7 +79,7 @@ function Register() {
 
       if (!response.ok) {
         setLoading(false);
-        alert(data.msg || "Registration failed. Please try again.");
+        showError(data.msg || "Registration failed. Please try again.");
         return;
       }
 
@@ -85,14 +87,14 @@ function Register() {
       setSuccess(true);
 
       setTimeout(() => {
-        alert("Registration successful — you can now login.");
+        showSuccess("Registration successful! You can now login.");
         setFormData({ name: "", email: "", password: "", confirmPassword: "" });
         navigate("/login");
       }, 1200);
     } catch (err) {
       setLoading(false);
       console.error(err);
-      alert("Server error. Please make sure the backend is running.");
+      showError("Server error. Please make sure the backend is running.");
     }
   };
 

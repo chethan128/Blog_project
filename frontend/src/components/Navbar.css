@@ -1,9 +1,11 @@
 .navbar {
   width: 100%;
-  padding: 18px 60px;
+  padding: 12px 60px;
 
-  background: var(--card-bg);
-  color: white;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-color);
 
   display: flex;
   justify-content: space-between;
@@ -94,9 +96,21 @@
 }
 
 .nav-links a.active {
-  background: #09adee;
-  color: white;
-  box-shadow: 0 4px 12px rgba(9, 173, 238, 0.3);
+  background: transparent;
+  color: var(--primary-color);
+  font-weight: 700;
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  background: var(--primary-gradient);
+  border-radius: 4px;
 }
 
 .theme-toggle {
@@ -118,6 +132,63 @@
   background: rgba(9, 173, 238, 0.2);
   border-color: #09adee;
   transform: rotate(15deg);
+}
+
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 0;
+}
+
+.account-btn:hover {
+  background: rgba(9, 173, 238, 0.2);
+  border-color: #09adee;
+  color: #09adee;
+  transform: translateY(-2px);
+}
+
+.logout-btn {
+  color: #ef4444;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--card-bg);
 }
 
 .hamburger {

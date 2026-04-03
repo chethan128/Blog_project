@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./UserProfile.css";
 
-function UserProfile() {
+function UserProfile({ setIsAuthenticated }) {
     const { email } = useParams();
     const navigate = useNavigate();
     const currentUserEmail = localStorage.getItem("user_email");
 
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [savedPosts, setSavedPosts] = useState([]);
+    const [activeTab, setActiveTab] = useState('POSTS');
     const [isFollowing, setIsFollowing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -36,6 +38,19 @@ function UserProfile() {
                 if (resPosts.ok) {
                     const postsData = await resPosts.json();
                     setPosts(postsData);
+                }
+
+                if (email === currentUserEmail) {
+                    const token = localStorage.getItem("token");
+                    if (token) {
+                        const resSaved = await fetch("http://localhost:5000/api/bookmarks", {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+                        if (resSaved.ok) {
+                            const savedData = await resSaved.json();
+                            setSavedPosts(savedData);
+                        }
+                    }
                 }
             } catch (err) {
                 console.error("Failed to load user profile:", err);
@@ -88,7 +103,8 @@ function UserProfile() {
         localStorage.removeItem("user_name");
         localStorage.removeItem("user_id");
         localStorage.removeItem("posts");
-        navigate("/login");
+        if (setIsAuthenticated) setIsAuthenticated(false);
+        navigate("/login", { replace: true });
     };
 
     return (
@@ -157,12 +173,12 @@ function UserProfile() {
 
             {/* Divider and Tabs */}
             <div className="ig-tabs-container">
-                <div className="ig-tab active">
+                <div className={`ig-tab ${activeTab === 'POSTS' ? 'active' : ''}`} onClick={() => setActiveTab('POSTS')} style={{ cursor: 'pointer' }}>
                     <svg aria-label="Posts" color="currentColor" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><rect fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" width="18" x="3" y="3"></rect><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="9.015" x2="9.015" y1="3" y2="21"></line><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="14.985" x2="14.985" y1="3" y2="21"></line><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="9.015" y2="9.015"></line><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="14.985" y2="14.985"></line></svg>
                     <span>POSTS</span>
                 </div>
                 {isOwnProfile && (
-                    <div className="ig-tab">
+                    <div className={`ig-tab ${activeTab === 'SAVED' ? 'active' : ''}`} onClick={() => setActiveTab('SAVED')} style={{ cursor: 'pointer' }}>
                         <svg aria-label="Saved" color="currentColor" fill="currentColor" height="12" role="img" viewBox="0 0 24 24" width="12"><polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon></svg>
                         <span>SAVED POSTS</span>
                     </div>
@@ -171,23 +187,24 @@ function UserProfile() {
 
             {/* Post Grid */}
             <div className="ig-post-grid">
-                {posts.length === 0 ? (
+                {(activeTab === 'POSTS' ? posts : savedPosts).length === 0 ? (
                     <div className="ig-empty-state">
-                        <div className="ig-empty-icon">📷</div>
+                        <div className="ig-empty-icon">{activeTab === 'POSTS' ? '📷' : '🔖'}</div>
                         <h2>No Posts Yet</h2>
-                        <p>When this user posts videos and photos, they'll appear here.</p>
+                        <p>{activeTab === 'POSTS' ? "When this user posts videos and photos, they'll appear here." : "Save your favorite posts to read them later."}</p>
                     </div>
                 ) : (
-                    posts.map(post => (
+                    (activeTab === 'POSTS' ? posts : savedPosts).map(post => (
                         <div
                             key={post._id}
                             className="ig-grid-item"
                             onClick={() => navigate(`/post/${post._id}`)}
                         >
                             <img
-                                src={post.image || `https://via.placeholder.com/600x600/121212/ffffff?text=${encodeURIComponent(post.title)}`}
+                                src={post.image || `https://placehold.co/600x600/E2E8F0/64748B?text=Pixie+Pages`}
                                 alt={post.title}
                                 className="ig-grid-img"
+                                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x600/E2E8F0/64748B?text=Pixie+Pages'; }}
                             />
                             <div className="ig-grid-overlay">
                                 <div className="ig-overlay-stat">

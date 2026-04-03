@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../components/Toast";
 import "./Login.css";
 
 const Login = ({ setIsAuthenticated }) => {
@@ -8,10 +9,17 @@ const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
     setError("");
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
@@ -36,11 +44,13 @@ const Login = ({ setIsAuthenticated }) => {
       localStorage.setItem("user_id", data.user.id);
 
       setIsAuthenticated(true);
-      alert("Login Successful ✅");
+      showSuccess("Login Successful ✅");
       navigate("/");
     } catch (err) {
       console.error(err);
       setError("Server error. Please make sure the backend is running.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,8 +116,8 @@ const Login = ({ setIsAuthenticated }) => {
               </span>
             </div>
 
-            <button type="submit" className="login-action-btn">
-              <span>Sign In</span>
+            <button type="submit" className="login-action-btn" disabled={loading}>
+              <span>{loading ? "Signing in..." : "Sign In"}</span>
               <div className="btn-glow"></div>
             </button>
           </form>

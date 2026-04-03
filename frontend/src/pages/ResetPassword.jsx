@@ -30,8 +30,8 @@ const ResetPassword = () => {
         setLoading(true);
 
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/resetpassword/${token}`, {
-                method: "PUT",
+            const response = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },

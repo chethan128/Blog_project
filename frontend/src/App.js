@@ -15,10 +15,11 @@ import ResetPassword from "./pages/ResetPassword";
 import UserProfile from "./pages/UserProfile";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
+import Drafts from "./pages/Drafts";
 
 import "./index.css";
 
-// Protected Route Component
+// Protected Route Component — relies only on React state for instant redirect on logout
 const ProtectedRoute = ({ element, isAuthenticated }) => {
   return isAuthenticated ? element : <Navigate to="/login" replace />;
 };
@@ -26,7 +27,7 @@ const ProtectedRoute = ({ element, isAuthenticated }) => {
 const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) => {
   return (
     <>
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
       <Routes>
         <Route
           path="/"
@@ -91,7 +92,7 @@ const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated
           path="/user/:email"
           element={
             <ProtectedRoute
-              element={<UserProfile />}
+              element={<UserProfile setIsAuthenticated={setIsAuthenticated} />}
               isAuthenticated={isAuthenticated}
             />
           }
@@ -110,6 +111,15 @@ const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated
           element={
             <ProtectedRoute
               element={<Notifications />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/drafts"
+          element={
+            <ProtectedRoute
+              element={<Drafts />}
               isAuthenticated={isAuthenticated}
             />
           }

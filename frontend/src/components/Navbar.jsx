@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-
-function Navbar({ darkMode, setDarkMode }) {
+import { FiSun, FiMoon, FiBell, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
@@ -12,7 +12,6 @@ function Navbar({ darkMode, setDarkMode }) {
 
   const hideNavContent = ["/login", "/register", "/forgot-password"].some(path => location.pathname.startsWith(path));
   const currentUserEmail = localStorage.getItem("user_email");
-  const isAuthenticated = !!currentUserEmail;
 
   useEffect(() => {
     const path = location.pathname.split("/")[1] || "home";
@@ -54,7 +53,8 @@ function Navbar({ darkMode, setDarkMode }) {
     localStorage.removeItem("user_id");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_name");
-    window.location.href = "/login";
+    if (setIsAuthenticated) setIsAuthenticated(false);
+    navigate("/login", { replace: true });
   };
 
   if (hideNavContent) {
@@ -68,15 +68,7 @@ function Navbar({ darkMode, setDarkMode }) {
       </div>
 
       <div className={`nav-center ${menuOpen ? "active" : ""}`}>
-        <form onSubmit={handleSearch}>
-          <input
-            type="text"
-            className="search"
-            placeholder="Search articles..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </form>
+
 
         <div className="nav-links">
           <Link to="/" className={activeLink === "home" ? "active" : ""} onClick={() => setMenuOpen(false)}>Home</Link>
@@ -86,8 +78,8 @@ function Navbar({ darkMode, setDarkMode }) {
       </div>
 
       <div className="nav-right">
-        <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "☀️" : "🌙"}
+        <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title="Toggle Theme">
+          {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
         </button>
 
         {isAuthenticated && (
@@ -97,21 +89,20 @@ function Navbar({ darkMode, setDarkMode }) {
               className="account-btn notif-btn"
               onClick={() => setMenuOpen(false)}
               title="Notifications"
-              style={{ position: "relative" }}
             >
-              🔔
+              <FiBell size={20} />
               {unreadCount > 0 && (
                 <span className="notif-badge">{unreadCount > 9 ? "9+" : unreadCount}</span>
               )}
             </Link>
             <Link to={`/user/${currentUserEmail}`} className="account-btn profile-btn" onClick={() => setMenuOpen(false)} title="My Profile">
-              👤
+              <FiUser size={20} />
             </Link>
             <Link to="/settings" className="account-btn settings-btn-nav" onClick={() => setMenuOpen(false)} title="Settings">
-              ⚙️
+              <FiSettings size={20} />
             </Link>
             <button className="account-btn logout-btn" onClick={handleLogout} title="Logout">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <FiLogOut size={20} />
             </button>
           </div>
         )}

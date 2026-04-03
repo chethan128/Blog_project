@@ -526,3 +526,102 @@ body.light .trending-card {
   box-shadow: 0 4px 14px rgba(35, 134, 54, 0.3);
   background: #2EA043;
 }
+
+/* ============ Enhanced Trending Cards ============ */
+.trending-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.trending-read-time {
+  font-size: 12px;
+  color: var(--subtext-color);
+}
+
+.trending-author-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+.trending-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trending-tag {
+  font-size: 11px;
+  color: var(--subtext-color);
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+/* ============ Enhanced Post Cards ============ */
+.post-card-read-time {
+  font-size: 11px;
+  color: var(--subtext-color);
+}
+
+.post-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-muted);
+}
+
+.post-card-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-card-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+.post-card-author-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.post-card-date {
+  font-size: 11px;
+  color: var(--subtext-color);
+}
+
+.post-card-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.post-card-tag {
+  font-size: 11px;
+  color: var(--subtext-color);
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border-radius: 8px;
+}

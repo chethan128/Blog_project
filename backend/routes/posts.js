@@ -13,9 +13,12 @@ router.get('/search', async (req, res) => {
             return res.json([]);
         }
         const posts = await Post.find(
-            { $text: { $search: q } },
+            { $text: { $search: q }, status: 'Published' },
             { score: { $meta: 'textScore' } }
-        ).sort({ score: { $meta: 'textScore' } }).limit(20);
+        )
+        .select('-viewedBy -likedBy')
+        .sort({ score: { $meta: 'textScore' } })
+        .limit(20);
         res.json(posts);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -26,13 +29,15 @@ router.get('/search', async (req, res) => {
 router.get('/trending', async (req, res) => {
     try {
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        const posts = await Post.find({ createdAt: { $gte: sevenDaysAgo } })
+        const posts = await Post.find({ createdAt: { $gte: sevenDaysAgo }, status: 'Published' })
+            .select('-viewedBy -likedBy')
             .sort({ likes: -1, viewsCount: -1 })
             .limit(6);
         
         // If not enough recent posts, fallback to all-time popular
         if (posts.length < 3) {
-            const allTimeTrending = await Post.find()
+            const allTimeTrending = await Post.find({ status: 'Published' })
+                .select('-viewedBy -likedBy')
                 .sort({ likes: -1, viewsCount: -1 })
                 .limit(6);
             return res.json(allTimeTrending);
@@ -43,24 +48,59 @@ router.get('/trending', async (req, res) => {
     }
 });
 
-// Get all posts (sorted newest first by default), optionally filtered by category
+// Get all published posts with pagination, optionally filtered by category
 router.get('/', async (req, res) => {
     try {
-        const filter = {};
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const filter = { status: 'Published' };
         if (req.query.category && req.query.category !== 'All') {
             filter.category = req.query.category;
         }
-        const posts = await Post.find(filter).sort({ createdAt: -1 });
-        res.json(posts);
+
+        const [posts, totalPosts] = await Promise.all([
+            Post.find(filter)
+                .select('-viewedBy -likedBy')
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit),
+            Post.countDocuments(filter)
+        ]);
+
+        res.json({
+            posts,
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
-// Get posts by a specific user email
+// Get drafts for the authenticated user
+router.get('/drafts', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const drafts = await Post.find({ author: user.email, status: 'Draft' })
+            .select('-viewedBy -likedBy')
+            .sort({ updatedAt: -1 });
+        res.json(drafts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Get posts by a specific user email (published only, for public profiles)
 router.get('/user/:email', async (req, res) => {
     try {
-        const posts = await Post.find({ author: req.params.email }).sort({ createdAt: -1 });
+        const posts = await Post.find({ author: req.params.email, status: 'Published' })
+            .select('-viewedBy -likedBy')
+            .sort({ createdAt: -1 });
         res.json(posts);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -100,7 +140,7 @@ router.get('/:id/related', async (req, res) => {
     }
 });
 
-// Create new post
+// Create new post (supports Published or Draft)
 router.post('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -114,6 +154,7 @@ router.post('/', auth, async (req, res) => {
             image: req.body.image,
             tags: req.body.tags || [],
             category: req.body.category || 'General',
+            status: req.body.status || 'Published',
             author: user.email
         });
 
@@ -141,9 +182,10 @@ router.put('/:id', auth, async (req, res) => {
             return res.status(403).json({ message: 'User not authorized to edit this post' });
         }
 
+        const updateData = { ...req.body, updatedAt: new Date() };
         const updatedPost = await Post.findByIdAndUpdate(
             req.params.id,
-            { $set: req.body },
+            { $set: updateData },
             { new: true }
         );
         res.json(updatedPost);
