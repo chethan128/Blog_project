@@ -13,15 +13,23 @@ import Create from "./pages/create";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import UserProfile from "./pages/UserProfile";
+import EditProfile from "./pages/EditProfile";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 import Drafts from "./pages/Drafts";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import "./index.css";
 
 // Protected Route Component — relies only on React state for instant redirect on logout
 const ProtectedRoute = ({ element, isAuthenticated }) => {
   return isAuthenticated ? element : <Navigate to="/login" replace />;
+};
+
+// Admin Route Component
+const AdminRoute = ({ element, isAuthenticated }) => {
+  const userRole = localStorage.getItem("user_role");
+  return isAuthenticated && userRole === "Admin" ? element : <Navigate to="/" replace />;
 };
 
 const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) => {
@@ -98,6 +106,15 @@ const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated
           }
         />
         <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute
+              element={<EditProfile />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
           path="/settings"
           element={
             <ProtectedRoute
@@ -120,6 +137,15 @@ const AppContent = ({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated
           element={
             <ProtectedRoute
               element={<Drafts />}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute
+              element={<AdminDashboard />}
               isAuthenticated={isAuthenticated}
             />
           }

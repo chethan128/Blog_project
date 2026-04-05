@@ -28,7 +28,7 @@ function Dashboard({ setIsAuthenticated }) {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/auth/user", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -53,7 +53,7 @@ function Dashboard({ setIsAuthenticated }) {
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/profile", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ function Dashboard({ setIsAuthenticated }) {
 
   const fetchUserPosts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/posts");
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts`);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -116,7 +116,7 @@ function Dashboard({ setIsAuthenticated }) {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:5000/api/bookmarks", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -139,6 +139,7 @@ function Dashboard({ setIsAuthenticated }) {
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_name");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("user_role");
     localStorage.removeItem("posts");
     setIsAuthenticated(false);
     navigate("/login", { replace: true });

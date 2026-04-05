@@ -13,7 +13,7 @@ function Drafts() {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:5000/api/posts/drafts", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/drafts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -35,7 +35,7 @@ function Drafts() {
     if (!token) return;
     if (window.confirm("Delete this draft permanently?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });

@@ -14,7 +14,7 @@ function Notifications() {
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:5000/api/notifications", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -34,7 +34,7 @@ function Notifications() {
   const handleMarkAllRead = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/notifications/read", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/notifications/read`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
       });

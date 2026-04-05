@@ -59,11 +59,24 @@ router.get('/', async (req, res) => {
         if (req.query.category && req.query.category !== 'All') {
             filter.category = req.query.category;
         }
+        if (req.query.search) {
+            filter.$or = [
+                { title: { $regex: req.query.search, $options: 'i' } },
+                { content: { $regex: req.query.search, $options: 'i' } }
+            ];
+        }
+
+        let sortObj = { createdAt: -1 }; // default newest
+        if (req.query.sort === 'oldest') {
+            sortObj = { createdAt: 1 };
+        } else if (req.query.sort === 'trending') {
+            sortObj = { likes: -1, viewsCount: -1 };
+        }
 
         const [posts, totalPosts] = await Promise.all([
             Post.find(filter)
                 .select('-viewedBy -likedBy')
-                .sort({ createdAt: -1 })
+                .sort(sortObj)
                 .skip(skip)
                 .limit(limit),
             Post.countDocuments(filter)

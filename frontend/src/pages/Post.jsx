@@ -45,7 +45,7 @@ function Post() {
 
   const fetchPostAndProfile = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${id}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${id}`);
       if (res.ok) {
         const postData = await res.json();
         setPost(postData);
@@ -56,7 +56,7 @@ function Post() {
         // Register view
         if (token && myEmail && postData.author && postData.author !== myEmail) {
           try {
-            await fetch(`http://localhost:5000/api/posts/${id}/view`, {
+            await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${id}/view`, {
               method: 'PUT',
               headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -67,7 +67,7 @@ function Post() {
 
         // Check if I follow the author
         if (myEmail && postData.author && postData.author !== myEmail) {
-          const resProfile = await fetch(`http://localhost:5000/api/auth/profile/${postData.author}`);
+          const resProfile = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/profile/${postData.author}`);
           if (resProfile.ok) {
             const profileData = await resProfile.json();
             setIsFollowing(profileData.followers?.includes(myEmail));
@@ -76,7 +76,7 @@ function Post() {
 
         // Fetch related posts
         try {
-          const relRes = await fetch(`http://localhost:5000/api/posts/${id}/related`);
+          const relRes = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${id}/related`);
           if (relRes.ok) {
             const relData = await relRes.json();
             setRelatedPosts(relData);
@@ -88,7 +88,7 @@ function Post() {
         // Check bookmark status
         if (token) {
           try {
-            const bkRes = await fetch(`http://localhost:5000/api/bookmarks/check/${id}`, {
+            const bkRes = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks/check/${id}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
             if (bkRes.ok) {
@@ -133,7 +133,7 @@ function Post() {
 
     if (post) {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${post._id}/like`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${post._id}/like`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ function Post() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/bookmarks/${post._id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks/${post._id}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -184,7 +184,7 @@ function Post() {
 
     if (post && commentText.trim() !== "") {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${post._id}/comments`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${post._id}/comments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ function Post() {
 
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${post._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${post._id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -245,7 +245,7 @@ function Post() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/follow/${post.author}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/follow/${post.author}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -295,7 +295,6 @@ function Post() {
           >
             {post.author?.split('@')[0] || "Pixie User"}
           </span>
-          <span className="post-date">{new Date(post.createdAt || post.date).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>
           {post.category && (
             <span className="post-category-badge">{post.category}</span>
           )}
@@ -320,11 +319,16 @@ function Post() {
         </div>
       </div>
 
-      {post.image && (
-        <div className="post-cover">
-          <img src={post.image} alt={post.title} />
-        </div>
-      )}
+      <div className="post-cover">
+        <img 
+          src={post.image || `https://placehold.co/800x400/121212/FFFFFF?text=${encodeURIComponent(post.title)}`} 
+          alt={post.title} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = `https://placehold.co/800x400/121212/FFFFFF?text=${encodeURIComponent(post.title)}`;
+          }}
+        />
+      </div>
 
       <div className="post-content" dangerouslySetInnerHTML={{ __html: post.content }} />
 
@@ -337,16 +341,32 @@ function Post() {
         </div>
       )}
 
+      {/* Date Footer like Instagram */}
+      <div className="post-date-footer" style={{ fontSize: "11px", color: "var(--text-muted, #8e8e8e)", marginTop: "10px", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: "500" }}>
+        {new Date(post.createdAt || post.date).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+      </div>
+
       <div className="combined-actions-bar">
         <div className="social-actions-group">
           <button className={`action-btn like-btn ${hasLiked ? 'liked' : ''}`} onClick={handleLike}>
-            <span className="icon">❤️</span> {post.likes}
+            <span className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={hasLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </span> {post.likes}
+          </button>
+          <button className="action-btn comment-btn" onClick={() => document.querySelector('.comment-form textarea').focus()}>
+            <span className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span> {(post.comments || []).length}
           </button>
           <button className="action-btn share-btn" onClick={handleShare}>
-            <span className="icon">🔗</span> Share
+            <span className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </span> Share
           </button>
           <button className={`action-btn bookmark-btn ${isBookmarked ? 'bookmarked' : ''}`} onClick={handleBookmark}>
-            <span className="icon">{isBookmarked ? '🔖' : '📑'}</span> {isBookmarked ? 'Saved' : 'Save'}
+            <span className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={isBookmarked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </span> {isBookmarked ? 'Saved' : 'Save'}
           </button>
         </div>
 

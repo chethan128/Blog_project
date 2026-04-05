@@ -63,7 +63,7 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,6 +82,13 @@ function Register() {
         showError(data.msg || "Registration failed. Please try again.");
         return;
       }
+
+      // Store JWT token and user info
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user_email", data.user.email);
+      localStorage.setItem("user_name", data.user.name);
+      localStorage.setItem("user_id", data.user.id);
+      if (data.user.role) localStorage.setItem("user_role", data.user.role);
 
       setLoading(false);
       setSuccess(true);

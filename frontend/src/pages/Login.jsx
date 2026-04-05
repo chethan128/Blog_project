@@ -10,7 +10,7 @@ const Login = ({ setIsAuthenticated }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { showSuccess, showError } = useToast();
+  const { showSuccess } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const Login = ({ setIsAuthenticated }) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +42,7 @@ const Login = ({ setIsAuthenticated }) => {
       localStorage.setItem("user_email", data.user.email);
       localStorage.setItem("user_name", data.user.name);
       localStorage.setItem("user_id", data.user.id);
+      if (data.user.role) localStorage.setItem("user_role", data.user.role);
 
       setIsAuthenticated(true);
       showSuccess("Login Successful ✅");

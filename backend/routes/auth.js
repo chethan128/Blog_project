@@ -55,7 +55,8 @@ router.post('/register', async (req, res) => {
                         bio: user.bio,
                         location: user.location,
                         website: user.website,
-                        profileImage: user.profileImage
+                        profileImage: user.profileImage,
+                        role: user.role
                     }
                 });
             }
@@ -110,7 +111,8 @@ router.post('/login', async (req, res) => {
                         bio: user.bio,
                         location: user.location,
                         website: user.website,
-                        profileImage: user.profileImage
+                        profileImage: user.profileImage,
+                        role: user.role
                     }
                 });
             }
@@ -207,10 +209,11 @@ router.put('/follow/:email', auth, async (req, res) => {
 // @desc    Update user profile
 // @access  Private
 router.put('/profile', auth, async (req, res) => {
-    const { bio, location, website, profileImage } = req.body;
+    const { name, bio, location, website, profileImage } = req.body;
 
     // Build profile object
     const profileFields = {};
+    if (name !== undefined) profileFields.name = name;
     if (bio !== undefined) profileFields.bio = bio;
     if (location !== undefined) profileFields.location = location;
     if (website !== undefined) profileFields.website = website;
@@ -244,11 +247,6 @@ const nodemailer = require('nodemailer');
 // @desc    Forgot Password - generates token and logs reset URL
 // @access  Public
 router.post('/forgotpassword', async (req, res) => {
-    console.log("--- Debug: Forgot Password Process Started ---");
-    console.log("Checking loaded env variables:");
-    console.log("EMAIL_USER:", process.env.EMAIL_USER);
-    console.log("EMAIL_PASS loaded:", process.env.EMAIL_PASS ? "Yes" : "No");
-
     const { email } = req.body;
 
     if (!email) {
@@ -275,7 +273,8 @@ router.post('/forgotpassword', async (req, res) => {
         await user.save();
 
         // Create reset url (matching the frontend route)
-        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
 
         // Send email with Nodemailer
         try {
@@ -330,25 +329,18 @@ router.post('/forgotpassword', async (req, res) => {
 // @desc    Reset Password
 // @access  Public
 router.post('/reset-password/:token', async (req, res) => {
-    console.log(`--- Debug: Reset Password Process Started for token: ${req.params.token} ---`);
-    
     try {
         const token = req.params.token;
         const { password } = req.body;
 
-        console.log(`Received token: ${token ? 'Yes' : 'No'}, Received password: ${password ? 'Yes' : 'No'}`);
-
         if (!password || password.length < 6) {
-            console.log('❌ Password validation failed: Not provided or too short');
             return res.status(400).json({ msg: 'Password must be at least 6 characters' });
         }
 
         // Verify JWT token
         let decoded;
         try {
-            console.log('Attempting to verify JWT token...');
             decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
-            console.log(`Token successfully decoded. User ID extracted: ${decoded.id}`);
         } catch (err) {
             console.error('❌ Token Verification Failed:', err.message);
             return res.status(400).json({ msg: 'Invalid or expired reset token' });
@@ -360,7 +352,6 @@ router.post('/reset-password/:token', async (req, res) => {
         }
 
         // Find user by ID from decoded JWT, and ensure the token matches the one in DB
-        console.log('Looking up user in the database...');
         const user = await User.findOne({
             _id: decoded.id,
             resetPasswordToken: token,
@@ -368,16 +359,13 @@ router.post('/reset-password/:token', async (req, res) => {
         });
 
         if (!user) {
-            console.error(`❌ User lookup failed. No user found for ID: ${decoded.id} with valid token/expiry.`);
             return res.status(400).json({ msg: 'Invalid or expired token. Please request a new link.' });
         }
 
-        console.log(`User found: ${user.email}. Generating salt and hashing new password...`);
         // Set new password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
-        console.log('Password hashed. Clearing reset tokens and saving user...');
         // Clear token fields
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;

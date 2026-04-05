@@ -18,6 +18,7 @@ function Explore() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -56,17 +57,31 @@ function Explore() {
   // Check URL for search param from navbar
   useEffect(() => {
     const urlSearch = searchParams.get("search");
-    if (urlSearch) setSearchTerm(urlSearch);
+    if (urlSearch) {
+        setSearchTerm(urlSearch);
+        setDebouncedSearchTerm(urlSearch);
+    }
   }, [searchParams]);
+
+  // Debounce search term
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+    return () => clearTimeout(timerId);
+  }, [searchTerm]);
 
   const fetchPosts = useCallback(async (pageNum = 1, append = false) => {
     if (pageNum === 1) setLoading(true);
     else setLoadingMore(true);
 
     try {
-      let url = `http://localhost:5000/api/posts?page=${pageNum}&limit=${LIMIT}`;
+      let url = `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts?page=${pageNum}&limit=${LIMIT}&sort=${sortBy}`;
       if (selectedCategory && selectedCategory !== "All") {
         url += `&category=${encodeURIComponent(selectedCategory)}`;
+      }
+      if (debouncedSearchTerm) {
+        url += `&search=${encodeURIComponent(debouncedSearchTerm)}`;
       }
       const res = await fetch(url);
       const data = await res.json();
@@ -89,14 +104,14 @@ function Explore() {
     }
     setLoading(false);
     setLoadingMore(false);
-  }, [selectedCategory]);
+  }, [selectedCategory, sortBy, debouncedSearchTerm]);
 
   // Fetch bookmark status for all posts
   const fetchBookmarks = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:5000/api/bookmarks", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -108,14 +123,14 @@ function Explore() {
     } catch (err) { /* ignore */ }
   };
 
-  // Reset and fetch when category changes
+  // Reset and fetch when category, sort, or search changes
   useEffect(() => {
     setPage(1);
     setHasMore(true);
     fetchPosts(1, false);
     fetchBookmarks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory]);
+  }, [selectedCategory, sortBy, debouncedSearchTerm]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -144,7 +159,7 @@ function Explore() {
     const postToLike = posts.find(p => String(p._id || p.id) === String(id));
     if (!postToLike) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${postToLike._id}/like`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${postToLike._id}/like`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
       });
@@ -163,7 +178,7 @@ function Explore() {
     const token = localStorage.getItem("token");
     if (!token) { showError("Please login to save posts."); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/bookmarks/${postId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks/${postId}`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -179,7 +194,7 @@ function Explore() {
     const token = localStorage.getItem("token");
     if (!token) { showError("Please login to follow authors."); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/follow/${authorEmail}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/follow/${authorEmail}`, {
         method: 'PUT', headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -201,7 +216,7 @@ function Explore() {
       try {
         const postToDelete = posts.find(p => String(p._id || p.id) === String(id));
         if (!postToDelete) return;
-        const res = await fetch(`http://localhost:5000/api/posts/${postToDelete._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${postToDelete._id}`, {
           method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -227,7 +242,7 @@ function Explore() {
     const text = (commentTexts[postId] || "").trim();
     if (!text) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${postId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ text })
@@ -247,23 +262,8 @@ function Explore() {
   const currentUserEmail = localStorage.getItem("user_email");
   const currentUserId = localStorage.getItem("user_id");
 
-  // Client-side filtering (search + sort) on already-loaded posts
-  let filtered = posts.filter((p) => {
-    if (!searchTerm) return true;
-    const term = searchTerm.toLowerCase();
-    return (
-      (p.title && p.title.toLowerCase().includes(term)) ||
-      (p.content && p.content.toLowerCase().includes(term))
-    );
-  });
-
-  if (sortBy === "newest") {
-    filtered.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-  } else if (sortBy === "oldest") {
-    filtered.sort((a, b) => new Date(a.createdAt || a.date) - new Date(b.createdAt || b.date));
-  } else if (sortBy === "trending") {
-    filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-  }
+  // Client-side filtering is no longer needed because the backend handles it.
+  let filtered = posts;
 
   return (
     <div className="explore-container">

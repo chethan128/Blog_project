@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { FiSun, FiMoon, FiBell, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
+import { FiSun, FiMoon, FiBell, FiUser, FiSettings, FiLogOut, FiShield } from "react-icons/fi";
 function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) {
-  const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
   const [unreadCount, setUnreadCount] = useState(0);
@@ -12,6 +11,7 @@ function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) 
 
   const hideNavContent = ["/login", "/register", "/forgot-password"].some(path => location.pathname.startsWith(path));
   const currentUserEmail = localStorage.getItem("user_email");
+  const userRole = localStorage.getItem("user_role");
 
   useEffect(() => {
     const path = location.pathname.split("/")[1] || "home";
@@ -25,7 +25,7 @@ function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) 
       const token = localStorage.getItem("token");
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:5000/api/notifications/unread-count", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/notifications/unread-count`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -41,18 +41,14 @@ function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) 
     return () => clearInterval(interval);
   }, [isAuthenticated]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/explore?search=${encodeURIComponent(searchTerm)}`);
-    }
-  };
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_name");
+    localStorage.removeItem("user_role");
     if (setIsAuthenticated) setIsAuthenticated(false);
     navigate("/login", { replace: true });
   };
@@ -84,6 +80,11 @@ function Navbar({ darkMode, setDarkMode, isAuthenticated, setIsAuthenticated }) 
 
         {isAuthenticated && (
           <div className="account-actions">
+            {userRole === 'Admin' && (
+              <Link to="/admin" className="account-btn admin-btn" onClick={() => setMenuOpen(false)} title="Admin Dashboard">
+                <FiShield size={20} color="#6C63FF" />
+              </Link>
+            )}
             <Link
               to="/notifications"
               className="account-btn notif-btn"

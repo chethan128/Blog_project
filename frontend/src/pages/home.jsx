@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/posts");
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts`);
         if (res.ok) {
           const data = await res.json();
           setPosts(data.posts || []);
@@ -25,7 +25,7 @@ function Home() {
 
     const fetchTrending = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/posts/trending");
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/trending`);
         if (res.ok) {
           const data = await res.json();
           setTrendingPosts(data.slice(0, 4));
@@ -37,7 +37,7 @@ function Home() {
 
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/posts/stats/overview");
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/stats/overview`);
         if (res.ok) {
           const data = await res.json();
           setStats(data);

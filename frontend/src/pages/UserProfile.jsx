@@ -20,7 +20,13 @@ function UserProfile({ setIsAuthenticated }) {
             setLoading(true);
             setError(null);
             try {
-                const resProfile = await fetch(`http://localhost:5000/api/auth/profile/${email}`);
+                const resProfile = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/profile/${email}?t=${Date.now()}`, {
+                    cache: 'no-store',
+                    headers: {
+                        'Pragma': 'no-cache',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
                 if (resProfile.ok) {
                     const data = await resProfile.json();
                     setProfile(data);
@@ -34,7 +40,7 @@ function UserProfile({ setIsAuthenticated }) {
                     return;
                 }
 
-                const resPosts = await fetch(`http://localhost:5000/api/posts/user/${email}`);
+                const resPosts = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/user/${email}?t=${Date.now()}`);
                 if (resPosts.ok) {
                     const postsData = await resPosts.json();
                     setPosts(postsData);
@@ -43,7 +49,7 @@ function UserProfile({ setIsAuthenticated }) {
                 if (email === currentUserEmail) {
                     const token = localStorage.getItem("token");
                     if (token) {
-                        const resSaved = await fetch("http://localhost:5000/api/bookmarks", {
+                        const resSaved = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/bookmarks`, {
                             headers: { Authorization: `Bearer ${token}` }
                         });
                         if (resSaved.ok) {
@@ -71,7 +77,7 @@ function UserProfile({ setIsAuthenticated }) {
         }
 
         try {
-            const res = await fetch(`http://localhost:5000/api/auth/follow/${email}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/follow/${email}`, {
                 method: "PUT",
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -102,6 +108,7 @@ function UserProfile({ setIsAuthenticated }) {
         localStorage.removeItem("user_email");
         localStorage.removeItem("user_name");
         localStorage.removeItem("user_id");
+        localStorage.removeItem("user_role");
         localStorage.removeItem("posts");
         if (setIsAuthenticated) setIsAuthenticated(false);
         navigate("/login", { replace: true });
@@ -127,8 +134,7 @@ function UserProfile({ setIsAuthenticated }) {
                         <div className="ig-action-buttons">
                             {isOwnProfile ? (
                                 <>
-                                    <button className="ig-btn ig-btn-secondary">Edit profile</button>
-                                    <button className="ig-btn ig-btn-secondary">View archive</button>
+                                    <button className="ig-btn ig-btn-secondary" onClick={() => navigate('/edit-profile')}>Edit profile</button>
                                     <button className="ig-btn ig-btn-logout" onClick={handleLogout}>Logout</button>
                                 </>
                             ) : (

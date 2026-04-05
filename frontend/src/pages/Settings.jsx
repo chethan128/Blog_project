@@ -16,7 +16,7 @@ function Settings() {
       const token = localStorage.getItem("token");
       if (!token) return;
       try {
-        const res = await fetch("http://localhost:5000/api/auth/user", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -29,6 +29,7 @@ function Settings() {
     };
     fetchUser();
   }, []);
+
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ function Settings() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/change-password", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/auth/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -91,6 +92,7 @@ function Settings() {
           </div>
         </div>
       </div>
+
 
       <div className="settings-section">
         <h3>🔒 Change Password</h3>

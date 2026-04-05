@@ -20,7 +20,8 @@ router.get('/analytics', async (req, res) => {
         const totalPosts = await Post.countDocuments();
         const publishedPosts = await Post.countDocuments({ status: 'Published' });
         const draftPosts = await Post.countDocuments({ status: 'Draft' });
-        const totalComments = await Comment.countDocuments();
+        const postsWithComments = await Post.find({}, 'comments');
+        const totalComments = postsWithComments.reduce((sum, p) => sum + (p.comments ? p.comments.length : 0), 0);
 
         const recentUsers = await User.find().sort({ date: -1 }).limit(5).select('-password');
         const recentPosts = await Post.find().sort({ createdAt: -1 }).limit(5).select('title author createdAt status viewsCount');
@@ -50,6 +51,9 @@ router.get('/users', async (req, res) => {
 router.put('/users/:id/role', async (req, res) => {
     try {
         const { role } = req.body;
+        if (req.user.id === req.params.id && role !== 'Admin') {
+            return res.status(400).json({ msg: 'You cannot demote yourself.' });
+        }
         const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true }).select('-password');
         res.json(user);
     } catch (err) {
@@ -69,8 +73,16 @@ router.put('/users/:id/status', async (req, res) => {
 
 router.delete('/users/:id', async (req, res) => {
     try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+        
+        // Cascade delete user's posts
+        await Post.deleteMany({ author: user.email });
+        
         await User.findByIdAndDelete(req.params.id);
-        res.json({ msg: 'User deleted successfully' });
+        res.json({ msg: 'User and their associated posts deleted successfully' });
     } catch (err) {
         res.status(500).send('Server Error');
     }
@@ -154,18 +166,25 @@ router.delete('/categories/:id', async (req, res) => {
 // ========================
 router.get('/comments', async (req, res) => {
     try {
-        const comments = await Comment.find().populate('post', 'title').sort({ createdAt: -1 });
-        res.json(comments);
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
+        const posts = await Post.find({}, 'title comments');
+        let allComments = [];
 
-router.put('/comments/:id/status', async (req, res) => {
-    try {
-        const { status } = req.body;
-        const comment = await Comment.findByIdAndUpdate(req.params.id, { status }, { new: true });
-        res.json(comment);
+        posts.forEach(post => {
+            if (post.comments && post.comments.length > 0) {
+                post.comments.forEach(c => {
+                    allComments.push({
+                        _id: c._id,
+                        text: c.text,
+                        author: c.author,
+                        createdAt: c.date,
+                        post: { _id: post._id, title: post.title }
+                    });
+                });
+            }
+        });
+
+        allComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        res.json(allComments);
     } catch (err) {
         res.status(500).send('Server Error');
     }
@@ -173,7 +192,17 @@ router.put('/comments/:id/status', async (req, res) => {
 
 router.delete('/comments/:id', async (req, res) => {
     try {
-        await Comment.findByIdAndDelete(req.params.id);
+        const commentId = req.params.id;
+        const post = await Post.findOneAndUpdate(
+            { "comments._id": commentId },
+            { $pull: { comments: { _id: commentId } } },
+            { new: true }
+        );
+
+        if (!post) {
+            return res.status(404).json({ msg: 'Comment not found' });
+        }
+
         res.json({ msg: 'Comment deleted successfully' });
     } catch (err) {
         res.status(500).send('Server Error');

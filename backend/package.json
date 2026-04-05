@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,5 +19,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.4",
     "nodemailer": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

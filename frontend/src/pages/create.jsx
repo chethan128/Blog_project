@@ -103,6 +103,10 @@ function Create() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        showError("Image too large. Please upload an image under 5MB.");
+        return;
+      }
       const reader = new FileReader();
       reader.onloadend = () => setImage(reader.result);
       reader.readAsDataURL(file);
@@ -175,13 +179,13 @@ function Create() {
       const token = localStorage.getItem("token");
       let res;
       if (editingPost && editingPost._id) {
-        res = await fetch(`http://localhost:5000/api/posts/${editingPost._id}`, {
+        res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts/${editingPost._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(postData),
         });
       } else {
-        res = await fetch("http://localhost:5000/api/posts", {
+        res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/posts`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(postData),
